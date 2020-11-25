@@ -3,9 +3,10 @@ import VueControleur.VueControleurGyromite;
 import modele.plateau.Jeu;
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+    Projet Gyromine
+    Pierre DAMEZ-FONTAINE
+    Raphaël RICHARD
+    LIFAP7 - 2020
  */
 
 
