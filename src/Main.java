@@ -4,7 +4,6 @@ import modele.plateau.*;
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Jeu jeu = new Jeu();
         
 			VueControleurGyromite vc = new VueControleurGyromite(jeu);
@@ -13,8 +12,6 @@ public class Main {
         
 			vc.setVisible(true);
 			jeu.start(300);
-		
-
 	}
 
 }
