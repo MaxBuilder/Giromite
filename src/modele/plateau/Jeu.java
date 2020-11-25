@@ -92,12 +92,12 @@ public class Jeu {
         addEntite(new Mur(this), 6, 6);
         addEntite(new Mur(this), 7, 6);
         
-        addEntite(new Colonne(this),8, 8);
-        addEntite(new Colonne(this),8, 7);
-        addEntite(new Colonne(this),8, 6);
-        addEntite(new Colonne(this),8, 5);
-        addEntite(new Colonne(this),8, 4);
-        addEntite(new Colonne(this),8, 3);
+        addEntite(new Mur(this),8, 8);
+        addEntite(new Mur(this),8, 7);
+        addEntite(new Mur(this),8, 6);
+        addEntite(new Mur(this),8, 5);
+        addEntite(new Mur(this),8, 4);
+        addEntite(new Mur(this),8, 3);
         
     }
 
