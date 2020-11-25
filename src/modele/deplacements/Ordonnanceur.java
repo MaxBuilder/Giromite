@@ -1,9 +1,9 @@
 package modele.deplacements;
 
-import modele.plateau.Jeu;
-
 import java.util.ArrayList;
 import java.util.Observable;
+
+import modele.plateau.Jeu;
 
 import static java.lang.Thread.*;
 

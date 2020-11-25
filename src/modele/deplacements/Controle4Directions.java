@@ -1,6 +1,7 @@
 package modele.deplacements;
 
 import modele.plateau.Entite;
+
 import modele.plateau.EntiteDynamique;
 
 /**
