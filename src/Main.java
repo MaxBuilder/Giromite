@@ -1,24 +1,17 @@
-
-import VueControleur.VueControleurGyromite;
-import modele.plateau.Jeu;
-
-/*
-    Projet Gyromine
-    Pierre DAMEZ-FONTAINE
-    Raphaël RICHARD
-    LIFAP7 - 2020
- */
-
+import VueControleur.*;
+import modele.plateau.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Jeu jeu = new Jeu();
-        
-        VueControleurGyromite vc = new VueControleurGyromite(jeu);
 
-        jeu.getOrdonnanceur().addObserver(vc);
+	public static void main(String[] args) {
+		Jeu jeu = new Jeu();
         
-        vc.setVisible(true);
-        jeu.start(300);
-    }
+			VueControleurGyromite vc = new VueControleurGyromite(jeu);
+
+			jeu.getOrdonnanceur().addObserver(vc);
+        
+			vc.setVisible(true);
+			jeu.start(300);
+	}
+
 }
