@@ -1,3 +1,3 @@
-# Giromite
+# Gyromite
 
 TO DO
