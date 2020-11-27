@@ -8,8 +8,8 @@ import modele.plateau.Jeu;
 import static java.lang.Thread.*;
 
 public class Ordonnanceur extends Observable implements Runnable {
-    private Jeu jeu;
-    private ArrayList<RealisateurDeDeplacement> lstDeplacements = new ArrayList<RealisateurDeDeplacement>();
+    private final Jeu jeu;
+    private final ArrayList<RealisateurDeDeplacement> lstDeplacements = new ArrayList<>();
     private long pause;
     public void add(RealisateurDeDeplacement deplacement) {
         lstDeplacements.add(deplacement);

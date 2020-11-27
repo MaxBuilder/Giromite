@@ -5,10 +5,7 @@
  */
 package modele.plateau;
 
-import modele.deplacements.Controle4Directions;
-import modele.deplacements.Direction;
-import modele.deplacements.Gravite;
-import modele.deplacements.Ordonnanceur;
+import modele.deplacements.*;
 
 import java.awt.Point;
 import java.util.HashMap;
@@ -21,17 +18,17 @@ public class Jeu {
     public static final int SIZE_X = 20;
     public static final int SIZE_Y = 10;
 
-    // compteur de déplacements horizontal et vertical (1 max par défaut, à chaque pas de temps)
-    private HashMap<Entite, Integer> cmptDeplH = new HashMap<Entite, Integer>();
-    private HashMap<Entite, Integer> cmptDeplV = new HashMap<Entite, Integer>();
+    // Compteur de déplacements horizontal et vertical (1 max par défaut, à chaque pas de temps)
+    private final HashMap<Entite, Integer> cmptDeplH = new HashMap<>();
+    private final HashMap<Entite, Integer> cmptDeplV = new HashMap<>();
 
     private Heros hector;
     private Bot smick;
 
-    private HashMap<Entite, Point> map = new  HashMap<Entite, Point>(); // permet de récupérer la position d'une entité à partir de sa référence
-    private Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité à partir de ses coordonnées
+    private final HashMap<Entite, Point> map = new HashMap<>(); // permet de récupérer la position d'une entité à partir de sa référence
+    private final Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité à partir de ses coordonnées
 
-    private Ordonnanceur ordonnanceur = new Ordonnanceur(this);
+    private final Ordonnanceur ordonnanceur = new Ordonnanceur(this);
 
     public Jeu() {
         initialisationDesEntites();
@@ -58,23 +55,33 @@ public class Jeu {
     	return smick;
     }
     
-    private void initialisationDesEntites() {
+    private void initialisationDesEntites() { // A CHANGER (serialization)
         hector = new Heros(this);
         addEntite(hector, 2, 1);
 
-        // Placement des bots
         smick = new Bot(this);
-        addEntite(smick, 6, 1);
+        addEntite(smick, 8, 1);
 
+        // Component gravité
         Gravite g = new Gravite();
         g.addEntiteDynamique(hector);
         g.addEntiteDynamique(smick);
         ordonnanceur.add(g);
-        
+
+        // Mouvement des bots
+        IA ia = new IA();
+        ia.addEntiteDynamique(smick);
+        ordonnanceur.add(ia);
+
+        // Movement des personnages
         Controle4Directions.getInstance().addEntiteDynamique(hector);
         ordonnanceur.add(Controle4Directions.getInstance());
 
         // Placement des entités de la map (à changer) :
+        for(int x = 0 ; x < 20 ; x++) {
+            for(int y = 0 ; y < 10 ; y++)
+                addEntite(new Vide(this), x, y);
+        }
 
         // Murs extérieurs horizontaux
         for (int x = 0; x < 20; x++) {
@@ -97,6 +104,11 @@ public class Jeu {
         addEntite(new Plateforme(this, TypePlateforme.horizontal), 11, 5);
         addEntite(new Plateforme(this, TypePlateforme.horizontal), 12, 5);
         addEntite(new Plateforme(this, TypePlateforme.horizontal), 13, 5);
+        addEntite(new Plateforme(this, TypePlateforme.vertical), 13, 4);
+        addEntite(new Plateforme(this, TypePlateforme.vertical), 13, 3);
+        addEntite(new Plateforme(this, TypePlateforme.vertical), 10, 6);
+        addEntite(new Plateforme(this, TypePlateforme.vertical), 10, 7);
+        addEntite(new Plateforme(this, TypePlateforme.vertical), 10, 8);
         addEntite(new Corde(this), 5, 1);
         addEntite(new Corde(this), 5, 2);
         addEntite(new Corde(this), 5, 3);
@@ -105,6 +117,9 @@ public class Jeu {
         addEntite(new Corde(this), 5, 6);
         addEntite(new Corde(this), 5, 7);
         addEntite(new Corde(this), 5, 8);
+        addEntite(new Corde(this), 9, 6);
+        addEntite(new Corde(this), 9, 7);
+        addEntite(new Corde(this), 9, 8);
     }
 
     private void addEntite(Entite e, int x, int y) {
@@ -156,17 +171,14 @@ public class Jeu {
     
     
     private Point calculerPointCible(Point pCourant, Direction d) {
-        Point pCible = null;
-        
-        switch(d) {
-            case haut: pCible = new Point(pCourant.x, pCourant.y - 1); break;
-            case bas : pCible = new Point(pCourant.x, pCourant.y + 1); break;
-            case gauche : pCible = new Point(pCourant.x - 1, pCourant.y); break;
-            case droite : pCible = new Point(pCourant.x + 1, pCourant.y); break;     
-            
-        }
-        
-        return pCible;
+        return switch (d) {
+            case haut -> new Point(pCourant.x, pCourant.y - 1);
+            case bas -> new Point(pCourant.x, pCourant.y + 1);
+            case gauche -> new Point(pCourant.x - 1, pCourant.y);
+            case droite -> new Point(pCourant.x + 1, pCourant.y);
+            case basGauche -> new Point(pCourant.x - 1, pCourant.y + 1);
+            case basDroite -> new Point(pCourant.x + 1, pCourant.y + 1);
+        };
     }
     
     private void deplacerEntite(Point pCourant, Point pCible, EntiteDynamique e) {

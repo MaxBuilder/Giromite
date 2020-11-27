@@ -24,13 +24,14 @@ import modele.plateau.*;
  *
  */
 public class VueControleurGyromite extends JFrame implements Observer {
-    private Jeu jeu; // référence sur une classe de modèle : permet d'accéder aux données du modèle pour le rafraichissement, permet de communiquer les actions clavier (ou souris)
+    private final Jeu jeu;
 
-    private int sizeX; // taille de la grille affichée
-    private int sizeY;
+    private final int sizeX;
+    private final int sizeY;
 
-    // icones affichées dans la grille
+    // Icones affichées dans la grille
     private ImageIcon icoHero;
+    private ImageIcon icoHeroCorde;
     private ImageIcon icoVide;
     private ImageIcon icoMur;
     private ImageIcon icoColonneV;
@@ -38,12 +39,12 @@ public class VueControleurGyromite extends JFrame implements Observer {
     private ImageIcon icoSmick;
     private ImageIcon icoCorde;
 
-    private JLabel[][] tabJLabel; // cases graphique (au moment du rafraichissement, chaque case va être associée à une icône, suivant ce qui est présent dans le modèle)
+    private JLabel[][] tabJLabel; // Cases graphiques
 
 
     public VueControleurGyromite(Jeu _jeu) {
-        sizeX = jeu.SIZE_X;
-        sizeY = _jeu.SIZE_Y;
+        sizeX = Jeu.SIZE_X;
+        sizeY = Jeu.SIZE_Y;
         jeu = _jeu;
 
         chargerLesIcones();
@@ -52,19 +53,18 @@ public class VueControleurGyromite extends JFrame implements Observer {
     }
 
     private void ajouterEcouteurClavier() {
-        addKeyListener(new KeyAdapter() { // new KeyAdapter() { ... } est une instance de classe anonyme, il s'agit d'un objet qui correspond au controleur dans MVC
+        addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                switch(e.getKeyCode()) {  // on regarde quelle touche a été pressée
-                    case KeyEvent.VK_LEFT : Controle4Directions.getInstance().setDirectionCourante(Direction.gauche); break;
-                    case KeyEvent.VK_RIGHT : Controle4Directions.getInstance().setDirectionCourante(Direction.droite); break;
-                    case KeyEvent.VK_DOWN : Controle4Directions.getInstance().setDirectionCourante(Direction.bas); break;
-                    case KeyEvent.VK_UP : Controle4Directions.getInstance().setDirectionCourante(Direction.haut); break;
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_LEFT -> Controle4Directions.getInstance().setDirectionCourante(Direction.gauche);
+                    case KeyEvent.VK_RIGHT -> Controle4Directions.getInstance().setDirectionCourante(Direction.droite);
+                    case KeyEvent.VK_DOWN -> Controle4Directions.getInstance().setDirectionCourante(Direction.bas);
+                    case KeyEvent.VK_UP -> Controle4Directions.getInstance().setDirectionCourante(Direction.haut);
                 }
             }
         });
     }
-
 
     private void chargerLesIcones() {
         icoHero = chargerIcone("data/Hector.png");
@@ -74,10 +74,11 @@ public class VueControleurGyromite extends JFrame implements Observer {
         icoColonneH = chargerIcone("data/PlateformeH.png");
         icoColonneV = chargerIcone("data/PlateformeV.png");
         icoCorde = chargerIcone("data/Corde.png");
+        icoHeroCorde = chargerIcone("data/HectorCorde.png");
     }
 
     private ImageIcon chargerIcone(String urlIcone) {
-        BufferedImage image = null;
+        BufferedImage image;
 
         try {
             image = ImageIO.read(new File(urlIcone));
@@ -92,8 +93,8 @@ public class VueControleurGyromite extends JFrame implements Observer {
     private void placerLesComposantsGraphiques() {
         setTitle("Gyromite");
         setSize(500, 280);
-        //setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // permet de terminer l'application à la fermeture de la fenêtre
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JComponent grilleJLabels = new JPanel(new GridLayout(sizeY, sizeX)); // grilleJLabels va contenir les cases graphiques et les positionner sous la forme d'une grille
 
@@ -119,7 +120,9 @@ public class VueControleurGyromite extends JFrame implements Observer {
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
                 if (jeu.getGrille()[x][y] instanceof Heros) {
-                    tabJLabel[x][y].setIcon(icoHero);
+                    if(((Heros) jeu.getGrille()[x][y]).getEstSurCorde())
+                        tabJLabel[x][y].setIcon(icoHeroCorde);
+                    else tabJLabel[x][y].setIcon(icoHero);
                 } else if (jeu.getGrille()[x][y] instanceof Mur) {
                     tabJLabel[x][y].setIcon(icoMur);
                 } else if (jeu.getGrille()[x][y] instanceof Plateforme) {
@@ -140,14 +143,5 @@ public class VueControleurGyromite extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         mettreAJourAffichage();
-        /*
-        SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        mettreAJourAffichage();
-                    }
-                }); 
-        */
-
     }
 }
