@@ -61,7 +61,8 @@ public class Jeu {
     private void initialisationDesEntites() {
         hector = new Heros(this);
         addEntite(hector, 2, 1);
-        
+
+        // Placement des bots
         smick = new Bot(this);
         addEntite(smick, 6, 1);
 
@@ -73,32 +74,37 @@ public class Jeu {
         Controle4Directions.getInstance().addEntiteDynamique(hector);
         ordonnanceur.add(Controle4Directions.getInstance());
 
-        // murs extérieurs horizontaux
+        // Placement des entités de la map (à changer) :
+
+        // Murs extérieurs horizontaux
         for (int x = 0; x < 20; x++) {
             addEntite(new Mur(this), x, 0);
             addEntite(new Mur(this), x, 9);
         }
 
-        // murs extérieurs verticaux
+        // Murs extérieurs verticaux
         for (int y = 1; y < 9; y++) {
             addEntite(new Mur(this), 0, y);
             addEntite(new Mur(this), 19, y);
         }
 
-        addEntite(new Mur(this), 2, 6);
-        addEntite(new Mur(this), 3, 6);
-        addEntite(new Mur(this), 4, 6);
-        addEntite(new Mur(this), 5, 6);
-        addEntite(new Mur(this), 6, 6);
-        addEntite(new Mur(this), 7, 6);
-        
-        addEntite(new Mur(this),8, 8);
-        addEntite(new Mur(this),8, 7);
-        addEntite(new Mur(this),8, 6);
-        addEntite(new Mur(this),8, 5);
-        addEntite(new Mur(this),8, 4);
-        addEntite(new Mur(this),8, 3);
-        
+        // Reste de la map (Plateformes etc)
+        addEntite(new Plateforme(this, TypePlateforme.horizontal), 6, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontal), 7, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontal), 8, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontal), 9, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontal), 10, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontal), 11, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontal), 12, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontal), 13, 5);
+        addEntite(new Corde(this), 5, 1);
+        addEntite(new Corde(this), 5, 2);
+        addEntite(new Corde(this), 5, 3);
+        addEntite(new Corde(this), 5, 4);
+        addEntite(new Corde(this), 5, 5);
+        addEntite(new Corde(this), 5, 6);
+        addEntite(new Corde(this), 5, 7);
+        addEntite(new Corde(this), 5, 8);
     }
 
     private void addEntite(Entite e, int x, int y) {
@@ -117,20 +123,19 @@ public class Jeu {
     /** Si le déplacement de l'entité est autorisé (pas de mur ou autre entité), il est réalisé
      * Sinon, rien n'est fait.
      */
-    public boolean deplacerEntite(Entite e, Direction d) {
+    public boolean deplacerEntite(EntiteDynamique e, Direction d) {
         boolean retour = false;
         
         Point pCourant = map.get(e);
         
         Point pCible = calculerPointCible(pCourant, d);
         
-        if (contenuDansGrille(pCible) && objetALaPosition(pCible) == null) { // a adapter (collisions murs, etc.)
-            // compter le déplacement : 1 deplacement horizontal et vertical max par pas de temps par entité
+        if (contenuDansGrille(pCible) && (objetALaPosition(pCible) == null || !objetALaPosition(pCible).peutServirDeSupport())) { // Adapter
+            // Compteur de déplacements
             switch (d) {
                 case bas, haut:
                     if (cmptDeplV.get(e) == null) {
                         cmptDeplV.put(e, 1);
-
                         retour = true;
                     }
                     break;
@@ -138,15 +143,13 @@ public class Jeu {
                     if (cmptDeplH.get(e) == null) {
                         cmptDeplH.put(e, 1);
                         retour = true;
-
                     }
                     break;
             }
         }
 
-        if (retour) {
+        if (retour)
             deplacerEntite(pCourant, pCible, e);
-        }
 
         return retour;
     }
@@ -166,8 +169,9 @@ public class Jeu {
         return pCible;
     }
     
-    private void deplacerEntite(Point pCourant, Point pCible, Entite e) {
-        grilleEntites[pCourant.x][pCourant.y] = null;
+    private void deplacerEntite(Point pCourant, Point pCible, EntiteDynamique e) {
+        grilleEntites[pCourant.x][pCourant.y] = e.getEntitePrecedente();
+        e.setEntitePrecedente(grilleEntites[pCible.x][pCible.y]);
         grilleEntites[pCible.x][pCible.y] = e;
         map.put(e, pCible);
     }

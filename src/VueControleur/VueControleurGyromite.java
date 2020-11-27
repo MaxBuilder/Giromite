@@ -33,8 +33,10 @@ public class VueControleurGyromite extends JFrame implements Observer {
     private ImageIcon icoHero;
     private ImageIcon icoVide;
     private ImageIcon icoMur;
-    private ImageIcon icoColonne;
+    private ImageIcon icoColonneV;
+    private ImageIcon icoColonneH;
     private ImageIcon icoSmick;
+    private ImageIcon icoCorde;
 
     private JLabel[][] tabJLabel; // cases graphique (au moment du rafraichissement, chaque case va être associée à une icône, suivant ce qui est présent dans le modèle)
 
@@ -65,11 +67,13 @@ public class VueControleurGyromite extends JFrame implements Observer {
 
 
     private void chargerLesIcones() {
-        icoHero = chargerIcone("data/HectorS32.png");
-        //icoColonne = chargerIcone("data/Colonne.png");
-        icoMur = chargerIcone("data/Plateforme32.png");
-        icoMur = chargerIcone("data/Plateforme32.png");
-        //icoSmick = chargerIcone("data/Fantome.png");
+        icoHero = chargerIcone("data/Hector.png");
+        icoMur = chargerIcone("data/Mur.png");
+        icoSmick = chargerIcone("data/Smick.png");
+        icoVide = chargerIcone("data/Vide.png");
+        icoColonneH = chargerIcone("data/PlateformeH.png");
+        icoColonneV = chargerIcone("data/PlateformeV.png");
+        icoCorde = chargerIcone("data/Corde.png");
     }
 
     private ImageIcon chargerIcone(String urlIcone) {
@@ -87,7 +91,7 @@ public class VueControleurGyromite extends JFrame implements Observer {
 
     private void placerLesComposantsGraphiques() {
         setTitle("Gyromite");
-        setSize(680, 380);
+        setSize(500, 280);
         //setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // permet de terminer l'application à la fermeture de la fenêtre
 
@@ -99,7 +103,7 @@ public class VueControleurGyromite extends JFrame implements Observer {
             for (int x = 0; x < sizeX; x++) {
                 JLabel jlab = new JLabel();
                 tabJLabel[x][y] = jlab; // on conserve les cases graphiques dans tabJLabel pour avoir un accès pratique à celles-ci (voir mettreAJourAffichage() )
-                tabJLabel[x][y].setSize(32, 32);
+                tabJLabel[x][y].setSize(24, 24);
                 grilleJLabels.add(jlab);
             }
         }
@@ -114,15 +118,18 @@ public class VueControleurGyromite extends JFrame implements Observer {
 
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
-                if (jeu.getGrille()[x][y] instanceof Heros) { // si la grille du modèle contient un Pacman, on associe l'icône Pacman du côté de la vue
-                    // System.out.println("Héros !");
+                if (jeu.getGrille()[x][y] instanceof Heros) {
                     tabJLabel[x][y].setIcon(icoHero);
                 } else if (jeu.getGrille()[x][y] instanceof Mur) {
                     tabJLabel[x][y].setIcon(icoMur);
-                } else if (jeu.getGrille()[x][y] instanceof Colonne) {
-                    tabJLabel[x][y].setIcon(icoColonne);
+                } else if (jeu.getGrille()[x][y] instanceof Plateforme) {
+                    if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.vertical)
+                        tabJLabel[x][y].setIcon(icoColonneV);
+                    else tabJLabel[x][y].setIcon(icoColonneH);
                 } else if (jeu.getGrille()[x][y] instanceof Bot) {
                 	tabJLabel[x][y].setIcon(icoSmick);
+                } else if (jeu.getGrille()[x][y] instanceof Corde) {
+                    tabJLabel[x][y].setIcon(icoCorde);
                 } else {
                     tabJLabel[x][y].setIcon(icoVide);
                 }
