@@ -24,6 +24,7 @@ public class Jeu {
 
     private Heros hector;
     private Bot smick;
+    private Bot smick2;
 
     private final HashMap<Entite, Point> map = new HashMap<>(); // permet de récupérer la position d'une entité à partir de sa référence
     private final Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité à partir de ses coordonnées
@@ -61,16 +62,20 @@ public class Jeu {
 
         smick = new Bot(this);
         addEntite(smick, 8, 1);
+        smick2 = new Bot(this);
+        addEntite(smick2, 18, 5);
 
         // Component gravité
         Gravite g = new Gravite();
         g.addEntiteDynamique(hector);
         g.addEntiteDynamique(smick);
+        g.addEntiteDynamique(smick2);
         ordonnanceur.add(g);
 
         // Mouvement des bots
         IA ia = new IA();
         ia.addEntiteDynamique(smick);
+        ia.addEntiteDynamique(smick2);
         ordonnanceur.add(ia);
 
         // Movement des personnages
@@ -120,9 +125,12 @@ public class Jeu {
         addEntite(new Corde(this), 9, 6);
         addEntite(new Corde(this), 9, 7);
         addEntite(new Corde(this), 9, 8);
+        addEntite(new Bombe(this), 4, 8);
     }
 
     private void addEntite(Entite e, int x, int y) {
+        if(e instanceof EntiteDynamique)
+            ((EntiteDynamique) e).setEntitePrecedente(grilleEntites[x][y]);
         grilleEntites[x][y] = e;
         map.put(e, new Point(x, y));
     }

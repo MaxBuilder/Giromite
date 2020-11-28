@@ -24,7 +24,13 @@ public class Controle4Directions extends RealisateurDeDeplacement {
     public boolean realiserDeplacement() {
         boolean ret = false;
         for (EntiteDynamique e : lstEntitesDynamiques) {
-            if (directionCourante != null)
+            // Gestion des collions :
+            if(e.getEntitePrecedente() instanceof Bombe) {
+                e.setEntitePrecedente(new Vide(e.getJeu()));
+            }
+
+            // Mouvement :
+            if (directionCourante != null) {
                 switch (directionCourante) {
                     case gauche, droite:
                         if (e.avancerDirectionChoisie(directionCourante))
@@ -47,6 +53,7 @@ public class Controle4Directions extends RealisateurDeDeplacement {
                         }
                         break;
                 }
+            }
             ((Heros) e).setEstSurCorde(e.getEntitePrecedente() instanceof Corde);
         }
 

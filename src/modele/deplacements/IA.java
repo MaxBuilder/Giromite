@@ -18,44 +18,44 @@ public class IA extends RealisateurDeDeplacement {
             Entite eBasGauche = e.regarderDansLaDirection(Direction.basGauche);
             Entite eBasDroite = e.regarderDansLaDirection(Direction.basDroite);
 
-            // Comportement 1 et 2 : ne pas tomber des plateformes et changer de direction en cas de colision
-            // Comportement 3 : grimper aux cordes lorsque l'entité en a l'occasion
             if(bot.getEntitePrecedente().peutPermettreDeMonterDescendre() && !(bot.getEntitePrecedente() instanceof Vide)) {
+                // Gestion des évènements liés à la corde :
                 if(bot.getEstSurCorde()) {
-                    if(eBas.peutServirDeSupport()) {
+                    if(eBas.peutServirDeSupport()) { // Descente de la corde (arrivé en bas)
                         bot.changerEstSurCorde();
                         bot.avancerDirectionChoisie(bot.getDirectionHorizontale() ? Direction.gauche : Direction.droite);
                         break;
                     }
-                    if(eBasGauche.peutServirDeSupport() && !eGauche.peutServirDeSupport() && Math.random() > 0.5) {
+                    if(eBasGauche.peutServirDeSupport() && !eGauche.peutServirDeSupport() && Math.random() > 0.5) { // Descente à gauche (intermédiaire)
                         bot.changerEstSurCorde();
                         bot.changerDirectionHorizontale(true);
                         bot.avancerDirectionChoisie(Direction.gauche);
                         break;
                     }
-                    if(eBasDroite.peutServirDeSupport() && !eDroite.peutServirDeSupport() && Math.random() > 0.5) {
+                    if(eBasDroite.peutServirDeSupport() && !eDroite.peutServirDeSupport() && Math.random() > 0.5) { // Descente à droite (intermédiaire)
                         bot.changerEstSurCorde();
                         bot.changerDirectionHorizontale(false);
                         bot.avancerDirectionChoisie(Direction.droite);
                         break;
                     }
                 }
-                if(!bot.getEstSurCorde() && Math.random() > 0.5) {
+                if(!bot.getEstSurCorde() && Math.random() > 0.5) { // Mise sur la corde et choix de la direction (haut/bas)
                     bot.changerEstSurCorde();
                     if(!eBas.peutServirDeSupport())
                         bot.changerDirectionVerticale(Math.random() > 0.5);
                     else bot.changerDirectionVerticale(true);
                 }
-                if(eHaut.peutServirDeSupport())
+                if(eHaut.peutServirDeSupport()) // Si arrivé tout en haut de la corde, inversion de la direction
                     bot.changerDirectionVerticale();
             }
 
+            // Gestiond des évènements liés à l'environnement : changement de direction si risque de chute ou obstacle
             if((bot.getDirectionHorizontale() && eBasGauche instanceof Vide) || (!bot.getDirectionHorizontale() && eBasDroite instanceof Vide) || eGauche.peutServirDeSupport() || eDroite.peutServirDeSupport()) {
                 bot.changerDirectionHorizontale();
                 ret = true;
             }
 
-            // Déplacement du bot
+            // Déplacement du bot :
             if (bot.getEstSurCorde())
                 bot.avancerDirectionChoisie(bot.getDirectionVerticale() ? Direction.haut : Direction.bas);
             else bot.avancerDirectionChoisie(bot.getDirectionHorizontale() ? Direction.gauche : Direction.droite);

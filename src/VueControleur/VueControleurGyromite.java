@@ -38,6 +38,7 @@ public class VueControleurGyromite extends JFrame implements Observer {
     private ImageIcon icoColonneH;
     private ImageIcon icoSmick;
     private ImageIcon icoCorde;
+    private ImageIcon icoBombe;
 
     private JLabel[][] tabJLabel; // Cases graphiques
 
@@ -75,6 +76,7 @@ public class VueControleurGyromite extends JFrame implements Observer {
         icoColonneV = chargerIcone("data/PlateformeV.png");
         icoCorde = chargerIcone("data/Corde.png");
         icoHeroCorde = chargerIcone("data/HectorCorde.png");
+        icoBombe = chargerIcone("data/Bombe.png");
     }
 
     private ImageIcon chargerIcone(String urlIcone) {
@@ -129,6 +131,8 @@ public class VueControleurGyromite extends JFrame implements Observer {
                     if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.vertical)
                         tabJLabel[x][y].setIcon(icoColonneV);
                     else tabJLabel[x][y].setIcon(icoColonneH);
+                } else if (jeu.getGrille()[x][y] instanceof Bombe) {
+                    tabJLabel[x][y].setIcon(icoBombe);
                 } else if (jeu.getGrille()[x][y] instanceof Bot) {
                 	tabJLabel[x][y].setIcon(icoSmick);
                 } else if (jeu.getGrille()[x][y] instanceof Corde) {
