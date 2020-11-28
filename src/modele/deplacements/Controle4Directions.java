@@ -8,18 +8,19 @@ import modele.plateau.*;
 public class Controle4Directions extends RealisateurDeDeplacement {
     private Direction directionCourante;
     // Design pattern singleton
-    private static Controle4Directions c3d;
+    private static Controle4Directions c4d;
 
     public static Controle4Directions getInstance() {
-        if (c3d == null) {
-            c3d = new Controle4Directions();
+        if (c4d == null) {
+            c4d = new Controle4Directions();
         }
-        return c3d;
+        return c4d;
     }
 
     public void setDirectionCourante(Direction _directionCourante) {
         directionCourante = _directionCourante;
     }
+    public Direction getDirectionCourante() { return directionCourante; }
 
     public boolean realiserDeplacement() {
         boolean ret = false;

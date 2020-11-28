@@ -22,10 +22,6 @@ public class Jeu {
     private final HashMap<Entite, Integer> cmptDeplH = new HashMap<>();
     private final HashMap<Entite, Integer> cmptDeplV = new HashMap<>();
 
-    private Heros hector;
-    private Bot smick;
-    private Bot smick2;
-
     private final HashMap<Entite, Point> map = new HashMap<>(); // permet de récupérer la position d'une entité à partir de sa référence
     private final Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité à partir de ses coordonnées
 
@@ -48,39 +44,42 @@ public class Jeu {
         return grilleEntites;
     }
     
-    public Heros getHector() {
-        return hector;
-    }
-    
-    public Bot getSmick() {
-    	return smick;
-    }
-    
     private void initialisationDesEntites() { // A CHANGER (serialization)
-        hector = new Heros(this);
+        Heros hector = new Heros(this);
         addEntite(hector, 2, 1);
 
-        smick = new Bot(this);
-        addEntite(smick, 8, 1);
-        smick2 = new Bot(this);
-        addEntite(smick2, 18, 5);
+        Bot smick = new Bot(this);
+        addEntite(smick, 18, 5);
+
+        CaseColonne case1 = new CaseColonne(this, CouleurColonne.bleue, TypeColonne.haut);
+        CaseColonne case2 = new CaseColonne(this, CouleurColonne.bleue, TypeColonne.inter);
+        CaseColonne case3 = new CaseColonne(this, CouleurColonne.bleue, TypeColonne.inter);
+        CaseColonne case4 = new CaseColonne(this, CouleurColonne.bleue, TypeColonne.bas);
+        Colonne colonne1 = new Colonne(this, CouleurColonne.bleue);
+        colonne1.ajouterColonne(case1);
+        colonne1.ajouterColonne(case2);
+        colonne1.ajouterColonne(case3);
+        colonne1.ajouterColonne(case4);
 
         // Component gravité
         Gravite g = new Gravite();
         g.addEntiteDynamique(hector);
         g.addEntiteDynamique(smick);
-        g.addEntiteDynamique(smick2);
         ordonnanceur.add(g);
 
         // Mouvement des bots
         IA ia = new IA();
-        ia.addEntiteDynamique(smick);
-        ia.addEntiteDynamique(smick2);
+        //ia.addEntiteDynamique(smick); // Désactivé pour le moment
         ordonnanceur.add(ia);
 
-        // Movement des personnages
+        // Mouvement du personnage
         Controle4Directions.getInstance().addEntiteDynamique(hector);
         ordonnanceur.add(Controle4Directions.getInstance());
+
+        // Mouvement des colonnes
+        Colonnes c = new Colonnes();
+        c.addEntiteDynamique(colonne1);
+        ordonnanceur.add(c);
 
         // Placement des entités de la map (à changer) :
         for(int x = 0 ; x < 20 ; x++) {
@@ -101,19 +100,27 @@ public class Jeu {
         }
 
         // Reste de la map (Plateformes etc)
-        addEntite(new Plateforme(this, TypePlateforme.horizontal), 6, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontal), 7, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontal), 8, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontal), 9, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontal), 10, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontal), 11, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontal), 12, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontal), 13, 5);
-        addEntite(new Plateforme(this, TypePlateforme.vertical), 13, 4);
-        addEntite(new Plateforme(this, TypePlateforme.vertical), 13, 3);
-        addEntite(new Plateforme(this, TypePlateforme.vertical), 10, 6);
-        addEntite(new Plateforme(this, TypePlateforme.vertical), 10, 7);
-        addEntite(new Plateforme(this, TypePlateforme.vertical), 10, 8);
+        addEntite(new Plateforme(this, TypePlateforme.horizontale), 6, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontale), 7, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontale), 8, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontale), 9, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontale), 10, 5);
+        addEntite(new Plateforme(this, TypePlateforme.horizontale), 11, 5);
+        addEntite(new Plateforme(this, TypePlateforme.supportColonneGauche), 12, 5);
+        //addEntite(new Plateforme(this, TypePlateforme.horizontale), 13, 5);
+        addEntite(new Plateforme(this, TypePlateforme.supportColonneDroite), 14, 5);
+        //addEntite(new Plateforme(this, TypePlateforme.horizontale), 12, 5);
+        //addEntite(new Plateforme(this, TypePlateforme.horizontale), 13, 5);
+        //addEntite(new Plateforme(this, TypePlateforme.verticale), 13, 4);
+        //addEntite(new Plateforme(this, TypePlateforme.verticale), 13, 3);
+        addEntite(new Plateforme(this, TypePlateforme.verticale), 10, 6);
+        addEntite(new Plateforme(this, TypePlateforme.verticale), 10, 7);
+        addEntite(new Plateforme(this, TypePlateforme.verticale), 10, 8);
+        addEntite(new Plateforme(this, TypePlateforme.horizontale), 13, 1);
+        addEntite(case1, 13, 2);
+        addEntite(case2, 13, 3);
+        addEntite(case3, 13, 4);
+        addEntite(case4, 13, 5);
         addEntite(new Corde(this), 5, 1);
         addEntite(new Corde(this), 5, 2);
         addEntite(new Corde(this), 5, 3);
@@ -134,18 +141,12 @@ public class Jeu {
         grilleEntites[x][y] = e;
         map.put(e, new Point(x, y));
     }
-    
-    /** Permet par exemple a une entité  de percevoir sont environnement proche et de définir sa stratégie de déplacement
-     *
-     */
+
     public Entite regarderDansLaDirection(Entite e, Direction d) {
         Point positionEntite = map.get(e);
         return objetALaPosition(calculerPointCible(positionEntite, d));
     }
-    
-    /** Si le déplacement de l'entité est autorisé (pas de mur ou autre entité), il est réalisé
-     * Sinon, rien n'est fait.
-     */
+
     public boolean deplacerEntite(EntiteDynamique e, Direction d) {
         boolean retour = false;
         
@@ -176,8 +177,7 @@ public class Jeu {
 
         return retour;
     }
-    
-    
+
     private Point calculerPointCible(Point pCourant, Direction d) {
         return switch (d) {
             case haut -> new Point(pCourant.x, pCourant.y - 1);
@@ -186,6 +186,7 @@ public class Jeu {
             case droite -> new Point(pCourant.x + 1, pCourant.y);
             case basGauche -> new Point(pCourant.x - 1, pCourant.y + 1);
             case basDroite -> new Point(pCourant.x + 1, pCourant.y + 1);
+            default -> new Point(pCourant.x, pCourant.y);
         };
     }
     
@@ -195,9 +196,7 @@ public class Jeu {
         grilleEntites[pCible.x][pCible.y] = e;
         map.put(e, pCible);
     }
-    
-    /** Indique si p est contenu dans la grille
-     */
+
     private boolean contenuDansGrille(Point p) {
         return p.x >= 0 && p.x < SIZE_X && p.y >= 0 && p.y < SIZE_Y;
     }

@@ -39,6 +39,14 @@ public class VueControleurGyromite extends JFrame implements Observer {
     private ImageIcon icoSmick;
     private ImageIcon icoCorde;
     private ImageIcon icoBombe;
+    private ImageIcon icoSupportColonneGauche;
+    private ImageIcon icoSupportColonneDroite;
+    private ImageIcon icoColonneBleue;
+    private ImageIcon icoColonneRouge;
+    private ImageIcon icoHautColonneBleue;
+    private ImageIcon icoBasColonneBleue;
+    private ImageIcon icoHautColonneRouge;
+    private ImageIcon icoBasColonneRouge;
 
     private JLabel[][] tabJLabel; // Cases graphiques
 
@@ -58,10 +66,12 @@ public class VueControleurGyromite extends JFrame implements Observer {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_LEFT -> Controle4Directions.getInstance().setDirectionCourante(Direction.gauche);
-                    case KeyEvent.VK_RIGHT -> Controle4Directions.getInstance().setDirectionCourante(Direction.droite);
-                    case KeyEvent.VK_DOWN -> Controle4Directions.getInstance().setDirectionCourante(Direction.bas);
-                    case KeyEvent.VK_UP -> Controle4Directions.getInstance().setDirectionCourante(Direction.haut);
+                    case KeyEvent.VK_Q -> Controle4Directions.getInstance().setDirectionCourante(Direction.gauche);
+                    case KeyEvent.VK_D -> Controle4Directions.getInstance().setDirectionCourante(Direction.droite);
+                    case KeyEvent.VK_S -> Controle4Directions.getInstance().setDirectionCourante(Direction.bas);
+                    case KeyEvent.VK_Z -> Controle4Directions.getInstance().setDirectionCourante(Direction.haut);
+                    case KeyEvent.VK_F -> Controle4Directions.getInstance().setDirectionCourante(Direction.colonneBleue);
+                    case KeyEvent.VK_R -> Controle4Directions.getInstance().setDirectionCourante(Direction.colonneRouge);
                 }
             }
         });
@@ -77,6 +87,14 @@ public class VueControleurGyromite extends JFrame implements Observer {
         icoCorde = chargerIcone("data/Corde.png");
         icoHeroCorde = chargerIcone("data/HectorCorde.png");
         icoBombe = chargerIcone("data/Bombe.png");
+        icoSupportColonneDroite = chargerIcone("data/supportColonneDroite.png");
+        icoSupportColonneGauche = chargerIcone("data/supportColonneGauche.png");
+        icoColonneBleue = chargerIcone("data/colonneBleue.png");
+        icoColonneRouge = chargerIcone("data/colonneRouge.png");
+        icoHautColonneBleue = chargerIcone("data/hautColonneBleue.png");
+        icoBasColonneBleue = chargerIcone("data/basColonneBleue.png");
+        icoHautColonneRouge = chargerIcone("data/hautColonneRouge.png");
+        icoBasColonneRouge = chargerIcone("data/basColonneRouge.png");
     }
 
     private ImageIcon chargerIcone(String urlIcone) {
@@ -113,10 +131,6 @@ public class VueControleurGyromite extends JFrame implements Observer {
         add(grilleJLabels);
     }
 
-    
-    /**
-     * Il y a une grille du côté du modèle ( jeu.getGrille() ) et une grille du côté de la vue (tabJLabel)
-     */
     private void mettreAJourAffichage() {
 
         for (int x = 0; x < sizeX; x++) {
@@ -125,21 +139,48 @@ public class VueControleurGyromite extends JFrame implements Observer {
                     if(((Heros) jeu.getGrille()[x][y]).getEstSurCorde())
                         tabJLabel[x][y].setIcon(icoHeroCorde);
                     else tabJLabel[x][y].setIcon(icoHero);
-                } else if (jeu.getGrille()[x][y] instanceof Mur) {
-                    tabJLabel[x][y].setIcon(icoMur);
-                } else if (jeu.getGrille()[x][y] instanceof Plateforme) {
-                    if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.vertical)
-                        tabJLabel[x][y].setIcon(icoColonneV);
-                    else tabJLabel[x][y].setIcon(icoColonneH);
-                } else if (jeu.getGrille()[x][y] instanceof Bombe) {
-                    tabJLabel[x][y].setIcon(icoBombe);
-                } else if (jeu.getGrille()[x][y] instanceof Bot) {
-                	tabJLabel[x][y].setIcon(icoSmick);
-                } else if (jeu.getGrille()[x][y] instanceof Corde) {
-                    tabJLabel[x][y].setIcon(icoCorde);
-                } else {
-                    tabJLabel[x][y].setIcon(icoVide);
                 }
+                else if (jeu.getGrille()[x][y] instanceof Mur) {
+                    tabJLabel[x][y].setIcon(icoMur);
+                }
+                else if (jeu.getGrille()[x][y] instanceof Plateforme) {
+                    if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.verticale)
+                        tabJLabel[x][y].setIcon(icoColonneV);
+                    else if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.horizontale)
+                        tabJLabel[x][y].setIcon(icoColonneH);
+                    else if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.supportColonneGauche)
+                        tabJLabel[x][y].setIcon(icoSupportColonneGauche);
+                    else if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.supportColonneDroite)
+                        tabJLabel[x][y].setIcon(icoSupportColonneDroite);
+                }
+                else if(jeu.getGrille()[x][y] instanceof CaseColonne) {
+                    if(((CaseColonne) jeu.getGrille()[x][y]).getCouleur() == CouleurColonne.bleue) {
+                        if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.bas)
+                            tabJLabel[x][y].setIcon(icoBasColonneBleue);
+                        else if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.inter)
+                            tabJLabel[x][y].setIcon(icoColonneBleue);
+                        else if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.haut)
+                            tabJLabel[x][y].setIcon(icoHautColonneBleue);
+                    }
+                    else {
+                        if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.bas)
+                            tabJLabel[x][y].setIcon(icoBasColonneRouge);
+                        else if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.inter)
+                            tabJLabel[x][y].setIcon(icoColonneRouge);
+                        else if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.haut)
+                            tabJLabel[x][y].setIcon(icoHautColonneRouge);
+                    }
+                }
+                else if (jeu.getGrille()[x][y] instanceof Bombe) {
+                    tabJLabel[x][y].setIcon(icoBombe);
+                }
+                else if (jeu.getGrille()[x][y] instanceof Bot) {
+                	tabJLabel[x][y].setIcon(icoSmick);
+                }
+                else if (jeu.getGrille()[x][y] instanceof Corde) {
+                    tabJLabel[x][y].setIcon(icoCorde);
+                }
+                else tabJLabel[x][y].setIcon(icoVide); // Cas par défaut
             }
         }
     }

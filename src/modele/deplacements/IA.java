@@ -5,7 +5,7 @@ import modele.plateau.Entite;
 import modele.plateau.EntiteDynamique;
 import modele.plateau.Vide;
 
-// Intelligence artficelle basée sur la perception immédiate de l'entité
+// Intelligence artficielle basée sur la perception immédiate de l'entité
 public class IA extends RealisateurDeDeplacement {
     protected boolean realiserDeplacement() {
         boolean ret = false;
@@ -49,7 +49,7 @@ public class IA extends RealisateurDeDeplacement {
                     bot.changerDirectionVerticale();
             }
 
-            // Gestiond des évènements liés à l'environnement : changement de direction si risque de chute ou obstacle
+            // Gestion des évènements liés à l'environnement : changement de direction si risque de chute ou obstacle
             if((bot.getDirectionHorizontale() && eBasGauche instanceof Vide) || (!bot.getDirectionHorizontale() && eBasDroite instanceof Vide) || eGauche.peutServirDeSupport() || eDroite.peutServirDeSupport()) {
                 bot.changerDirectionHorizontale();
                 ret = true;

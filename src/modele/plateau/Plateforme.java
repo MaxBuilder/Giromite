@@ -9,4 +9,8 @@ public class Plateforme extends EntiteStatique {
     }
 
     public TypePlateforme getType() { return type; }
+
+    public boolean peutEtreEcrase() { return false; }
+    public boolean peutServirDeSupport() { return true; }
+    public boolean peutPermettreDeMonterDescendre() { return false; };
 }
