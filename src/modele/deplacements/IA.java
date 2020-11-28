@@ -40,11 +40,9 @@ public class IA extends RealisateurDeDeplacement {
                         break;
                     }
                 }
-                if(!bot.getEstSurCorde()) {
-                    if(Math.random() > 0.5) {
-                        bot.changerEstSurCorde();
-                        bot.changerDirectionVerticale(Math.random() > 0.5);
-                    }
+                if(!bot.getEstSurCorde() && Math.random() > 0.5) {
+                    bot.changerEstSurCorde();
+                    bot.changerDirectionVerticale(Math.random() > 0.5);
                 }
                 if(eHaut.peutServirDeSupport())
                     bot.changerDirectionVerticale();
