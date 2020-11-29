@@ -8,9 +8,15 @@ import modele.plateau.entites_statiques.Vide;
 // Intelligence artficielle basée sur la perception immédiate de l'entité
 public class RealisateurIA extends RealisateurDeDeplacement {
     protected boolean realiserDeplacement() {
-        boolean ret = false;
         for (EntiteDynamique e : lstEntitesDynamiques) {
             Bot bot = (Bot) e;
+
+            if(bot.getCompteur() < 2) {
+                bot.incrementerCompteur();
+                break;
+            }
+            else bot.razCompteur();
+
             Entite eBas = e.regarderDansLaDirection(Direction.bas);
             Entite eHaut = e.regarderDansLaDirection(Direction.haut);
             Entite eGauche = e.regarderDansLaDirection(Direction.gauche);
@@ -52,7 +58,6 @@ public class RealisateurIA extends RealisateurDeDeplacement {
             // Gestion des évènements liés à l'environnement : changement de direction si risque de chute ou obstacle
             if((bot.getDirectionHorizontale() && eBasGauche instanceof Vide) || (!bot.getDirectionHorizontale() && eBasDroite instanceof Vide) || eGauche.peutServirDeSupport() || eDroite.peutServirDeSupport()) {
                 bot.changerDirectionHorizontale();
-                ret = true;
             }
 
             // Déplacement du bot :
@@ -60,6 +65,6 @@ public class RealisateurIA extends RealisateurDeDeplacement {
                 bot.avancerDirectionChoisie(bot.getDirectionVerticale() ? Direction.haut : Direction.bas);
             else bot.avancerDirectionChoisie(bot.getDirectionHorizontale() ? Direction.gauche : Direction.droite);
         }
-        return ret;
+        return true;
     }
 }

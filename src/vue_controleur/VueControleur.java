@@ -141,10 +141,10 @@ public class VueControleur extends JFrame implements Observer {
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
                 if (jeu.getGrille()[x][y] instanceof Heros) {
-                    if(((Heros) jeu.getGrille()[x][y]).getEstSurCorde())
-                        tabJLabel[x][y].setIcon(icoHeroCorde);
-                    else if(((Heros) jeu.getGrille()[x][y]).getEstMort())
+                    if(((Heros) jeu.getGrille()[x][y]).getEstMort())
                         tabJLabel[x][y].setIcon(icoHeroMort);
+                    else if(((Heros) jeu.getGrille()[x][y]).getEstSurCorde())
+                        tabJLabel[x][y].setIcon(icoHeroCorde);
                     else tabJLabel[x][y].setIcon(icoHero);
                 }
                 else if (jeu.getGrille()[x][y] instanceof Mur) {

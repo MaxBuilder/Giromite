@@ -25,12 +25,16 @@ public class Bot extends EntiteDynamique {
     private boolean directionH; // true -> gauche, false -> droite
     private boolean directionV; // true -> monter, false -> descendre
     private boolean estSurCorde;
+    private int compteurMouvement;
 
     public void changerDirectionVerticale() { directionV = !directionV; }
     public void changerDirectionVerticale(boolean val) { directionV = val; }
     public void changerDirectionHorizontale() { directionH = !directionH; }
     public void changerDirectionHorizontale(boolean val) { directionH = val; }
     public void changerEstSurCorde() { estSurCorde = !estSurCorde; }
+    public void incrementerCompteur() { compteurMouvement++; }
+    public void razCompteur() { compteurMouvement = 0; }
+    public int getCompteur() { return compteurMouvement; }
 
     public boolean getDirectionVerticale() { return directionV; }
     public boolean getDirectionHorizontale() { return directionH; }

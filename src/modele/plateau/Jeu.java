@@ -53,7 +53,7 @@ public class Jeu {
     
     private void initialisationDesEntites() {
         // Ouverture fichier
-        File fichier = new File("data/niveaux/niveau_test.txt");
+        File fichier = new File("data/niveaux/niveau_test2.txt");
         Scanner scanner = null;
 
         try {
