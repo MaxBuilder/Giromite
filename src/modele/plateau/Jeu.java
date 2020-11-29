@@ -24,11 +24,12 @@ public class Jeu {
     public static final int SIZE_Y = 10;
 
     // Compteur de déplacements horizontal et vertical (1 max par défaut, à chaque pas de temps)
-    private final HashMap<Entite, Integer> cmptDeplH = new HashMap<>();
-    private final HashMap<Entite, Integer> cmptDeplV = new HashMap<>();
+    //private final HashMap<Entite, Integer> cmptDeplH = new HashMap<>();
+    //private final HashMap<Entite, Integer> cmptDeplV = new HashMap<>();
+    private final HashMap<Entite, Integer> cmptDepl = new HashMap<>();
 
     private final HashMap<Entite, Point> map = new HashMap<>(); // permet de récupérer la position d'une entité à partir de sa référence
-    private final Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité à partir de ses coordonnées
+    private final Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité  d à partir de ses coordonnées
 
     private final Ordonnanceur ordonnanceur = new Ordonnanceur(this);
 
@@ -37,8 +38,9 @@ public class Jeu {
     }
 
     public void resetCmptDepl() {
-        cmptDeplH.clear();
-        cmptDeplV.clear();
+        //cmptDeplH.clear();
+        //cmptDeplV.clear();
+        cmptDepl.clear();
     }
 
     public void start(long _pause) {
@@ -166,7 +168,7 @@ public class Jeu {
         
         if (contenuDansGrille(pCible) && (objetALaPosition(pCible) == null || !objetALaPosition(pCible).peutServirDeSupport())) { // Adapter
             // Compteur de déplacements
-            switch (d) {
+            /*switch (d) {
                 case bas, haut:
                     if (cmptDeplV.get(e) == null) {
                         cmptDeplV.put(e, 1);
@@ -179,6 +181,10 @@ public class Jeu {
                         retour = true;
                     }
                     break;
+            }*/
+            if (cmptDepl.get(e) == null) {
+                cmptDepl.put(e, 1);
+                retour = true;
             }
         }
 
