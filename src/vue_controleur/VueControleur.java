@@ -61,7 +61,9 @@ public class VueControleur extends JFrame implements Observer {
         chargerLesIcones();
         placerLesComposantsGraphiques();
         ajouterEcouteurClavier();
-    }
+        mettreAJourAffichage(); // Première initiation pour ne pas avoir de frame blanche
+
+        }
 
     private void ajouterEcouteurClavier() {
         addKeyListener(new KeyAdapter() {
