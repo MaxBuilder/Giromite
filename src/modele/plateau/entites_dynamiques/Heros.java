@@ -8,10 +8,12 @@ import modele.plateau.Jeu;
  */
 public class Heros extends EntiteDynamique {
     private boolean estSurCorde;
+    private boolean estMort;
 
     public Heros(Jeu _jeu) {
         super(_jeu);
         estSurCorde = false;
+        estMort = false;
     }
 
     public boolean peutEtreEcrase() { return true; }
@@ -20,4 +22,7 @@ public class Heros extends EntiteDynamique {
 
     public boolean getEstSurCorde() { return estSurCorde; }
     public void setEstSurCorde(boolean val) { estSurCorde = val; }
+
+    public boolean getEstMort() { return estMort; }
+    public void setEstMort(boolean val) { estMort = val; }
 }

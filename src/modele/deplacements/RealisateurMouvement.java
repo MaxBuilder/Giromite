@@ -1,6 +1,7 @@
 package modele.deplacements;
 
 import modele.plateau.*;
+import modele.plateau.entites_dynamiques.Bot;
 import modele.plateau.entites_dynamiques.Heros;
 import modele.plateau.entites_statiques.Bombe;
 import modele.plateau.entites_statiques.Corde;
@@ -33,9 +34,11 @@ public class RealisateurMouvement extends RealisateurDeDeplacement {
             if(e.getEntitePrecedente() instanceof Bombe) {
                 e.setEntitePrecedente(new Vide(e.getJeu()));
             }
+            if(e.regarderDansLaDirection(Direction.gauche) instanceof Bot || e.regarderDansLaDirection(Direction.droite) instanceof Bot)
+                ((Heros) e).setEstMort(true);
 
             // Mouvement :
-            if (directionCourante != null) {
+            if (directionCourante != null && !((Heros) e).getEstMort()) {
                 switch (directionCourante) {
                     case gauche, droite:
                         if (e.regarderDansLaDirection(Direction.bas).peutServirDeSupport() || ((Heros) e).getEstSurCorde()) {

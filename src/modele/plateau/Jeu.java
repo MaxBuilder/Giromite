@@ -31,6 +31,10 @@ public class Jeu {
     private final HashMap<Entite, Point> map = new HashMap<>(); // permet de récupérer la position d'une entité à partir de sa référence
     private final Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité  d à partir de ses coordonnées
 
+    RealisateurGravite g = new RealisateurGravite();
+    RealisateurIA ia = new RealisateurIA();
+    RealisateurColonnes c = new RealisateurColonnes();
+
     private final Ordonnanceur ordonnanceur = new Ordonnanceur(this);
 
     public Jeu() {
@@ -63,18 +67,13 @@ public class Jeu {
             System.exit(0);
         }
 
-        // Déclaration des réalisateurs de mouvement
-        RealisateurGravite g = new RealisateurGravite();
-        RealisateurIA ia = new RealisateurIA();
-        RealisateurColonnes c = new RealisateurColonnes();
-
         // Table pour les colonnes
         HashMap<Integer, Colonne> TableColonne = new HashMap<>();
 
         // Traitement du fichier texte
         for(int y = 0 ; y < SIZE_Y ; y++) {
             for(int x = 0 ; x < SIZE_X ; x++) {
-                String it = scanner.next();         // PE arranger les conditons par ordre d'occurence
+                String it = scanner.next();         // Arranger les conditons par ordre d'occurence
                 // Statiques
                 if(it.equals("M"))
                     addEntite(new Mur(this), x, y);
@@ -142,17 +141,30 @@ public class Jeu {
 
         // Ajout des réalisateurs à l'ordonnanceur
         ordonnanceur.add(g);
-        ordonnanceur.add(ia);
         ordonnanceur.add(RealisateurMouvement.getInstance());
         ordonnanceur.add(c);
+        ordonnanceur.add(ia);
     }
 
-    private void addEntite(Entite e, int x, int y) {
+    private void addEntite(Entite e, int x, int y) { // A renommer
         if(e instanceof EntiteDynamique)
             ((EntiteDynamique) e).setEntitePrecedente(grilleEntites[x][y]);
         grilleEntites[x][y] = e;
         map.put(e, new Point(x, y));
     }
+
+    public void supprimerEntite(EntiteDynamique e) {
+        Point p = new Point(map.get(e));
+        grilleEntites[p.x][p.y] = new Vide(this);
+        map.remove(e);
+
+        g.removeEntiteDynamique(e);
+        if (e instanceof Bot)
+            ia.removeEntiteDynamique(e);
+        else if(e instanceof Heros)
+            RealisateurMouvement.getInstance().removeEntiteDynamique(e);
+    }
+
 
     public Entite regarderDansLaDirection(Entite e, Direction d) {
         Point positionEntite = map.get(e);

@@ -49,9 +49,9 @@ public class VueControleur extends JFrame implements Observer {
     private ImageIcon icoBasColonneBleue;
     private ImageIcon icoHautColonneRouge;
     private ImageIcon icoBasColonneRouge;
+    private ImageIcon icoHeroMort;
 
     private JLabel[][] tabJLabel; // Cases graphiques
-
 
     public VueControleur(Jeu _jeu) {
         sizeX = Jeu.SIZE_X;
@@ -89,14 +89,15 @@ public class VueControleur extends JFrame implements Observer {
         icoCorde = chargerIcone("data/Corde.png");
         icoHeroCorde = chargerIcone("data/HectorCorde.png");
         icoBombe = chargerIcone("data/Bombe.png");
-        icoSupportColonneDroite = chargerIcone("data/supportColonneDroite.png");
-        icoSupportColonneGauche = chargerIcone("data/supportColonneGauche.png");
-        icoColonneBleue = chargerIcone("data/colonneBleue.png");
-        icoColonneRouge = chargerIcone("data/colonneRouge.png");
-        icoHautColonneBleue = chargerIcone("data/hautColonneBleue.png");
-        icoBasColonneBleue = chargerIcone("data/basColonneBleue.png");
-        icoHautColonneRouge = chargerIcone("data/hautColonneRouge.png");
-        icoBasColonneRouge = chargerIcone("data/basColonneRouge.png");
+        icoSupportColonneDroite = chargerIcone("data/SupportColonneDroite.png");
+        icoSupportColonneGauche = chargerIcone("data/SupportColonneGauche.png");
+        icoColonneBleue = chargerIcone("data/ColonneBleue.png");
+        icoColonneRouge = chargerIcone("data/ColonneRouge.png");
+        icoHautColonneBleue = chargerIcone("data/HautColonneBleue.png");
+        icoBasColonneBleue = chargerIcone("data/BasColonneBleue.png");
+        icoHautColonneRouge = chargerIcone("data/HautColonneRouge.png");
+        icoBasColonneRouge = chargerIcone("data/BasColonneRouge.png");
+        icoHeroMort = chargerIcone("data/HectorMort.png");
     }
 
     private ImageIcon chargerIcone(String urlIcone) {
@@ -140,6 +141,8 @@ public class VueControleur extends JFrame implements Observer {
                 if (jeu.getGrille()[x][y] instanceof Heros) {
                     if(((Heros) jeu.getGrille()[x][y]).getEstSurCorde())
                         tabJLabel[x][y].setIcon(icoHeroCorde);
+                    else if(((Heros) jeu.getGrille()[x][y]).getEstMort())
+                        tabJLabel[x][y].setIcon(icoHeroMort);
                     else tabJLabel[x][y].setIcon(icoHero);
                 }
                 else if (jeu.getGrille()[x][y] instanceof Mur) {
