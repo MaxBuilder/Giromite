@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import modele.deplacements.Controle4Directions;
+import modele.deplacements.RealisateurDeplacement;
 import modele.deplacements.Direction;
 import modele.plateau.*;
 
@@ -66,12 +66,12 @@ public class VueControleurGyromite extends JFrame implements Observer {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_Q -> Controle4Directions.getInstance().setDirectionCourante(Direction.gauche);
-                    case KeyEvent.VK_D -> Controle4Directions.getInstance().setDirectionCourante(Direction.droite);
-                    case KeyEvent.VK_S -> Controle4Directions.getInstance().setDirectionCourante(Direction.bas);
-                    case KeyEvent.VK_Z -> Controle4Directions.getInstance().setDirectionCourante(Direction.haut);
-                    case KeyEvent.VK_F -> Controle4Directions.getInstance().setDirectionCourante(Direction.colonneBleue);
-                    case KeyEvent.VK_R -> Controle4Directions.getInstance().setDirectionCourante(Direction.colonneRouge);
+                    case KeyEvent.VK_Q -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.gauche);
+                    case KeyEvent.VK_D -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.droite);
+                    case KeyEvent.VK_S -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.bas);
+                    case KeyEvent.VK_Z -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.haut);
+                    case KeyEvent.VK_F -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.colonneBleue);
+                    case KeyEvent.VK_R -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.colonneRouge);
                 }
             }
         });

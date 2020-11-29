@@ -5,10 +5,10 @@ import modele.plateau.Colonne;
 import modele.plateau.CouleurColonne;
 import modele.plateau.EntiteDynamique;
 
-public class Colonnes extends RealisateurDeDeplacement {
+public class RealisateurColonnes extends RealisateurDeDeplacement {
     boolean directionBleue, directionRouge;
 
-    public Colonnes() {
+    public RealisateurColonnes() {
         directionBleue = true;
         directionRouge = true;
     }
@@ -17,7 +17,7 @@ public class Colonnes extends RealisateurDeDeplacement {
         boolean ret = false;
 
         // Mise à jour des évènements
-        Direction directionCourante = Controle4Directions.getInstance().getDirectionCourante();
+        Direction directionCourante = RealisateurDeplacement.getInstance().getDirectionCourante();
         if (directionCourante != null) {
             switch (directionCourante) {
                 case colonneBleue -> directionBleue = !directionBleue;

@@ -3,7 +3,7 @@ package modele.deplacements;
 import modele.plateau.Entite;
 import modele.plateau.EntiteDynamique;
 
-public class Gravite extends RealisateurDeDeplacement {
+public class RealisateurGravite extends RealisateurDeDeplacement {
     @Override
     public boolean realiserDeplacement() {
         boolean ret = false;

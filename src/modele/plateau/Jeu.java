@@ -62,22 +62,22 @@ public class Jeu {
         colonne1.ajouterColonne(case4);
 
         // Component gravité
-        Gravite g = new Gravite();
+        RealisateurGravite g = new RealisateurGravite();
         g.addEntiteDynamique(hector);
         g.addEntiteDynamique(smick);
         ordonnanceur.add(g);
 
         // Mouvement des bots
-        IA ia = new IA();
+        RealisateurIA ia = new RealisateurIA();
         //ia.addEntiteDynamique(smick); // Désactivé pour le moment
         ordonnanceur.add(ia);
 
         // Mouvement du personnage
-        Controle4Directions.getInstance().addEntiteDynamique(hector);
-        ordonnanceur.add(Controle4Directions.getInstance());
+        RealisateurDeplacement.getInstance().addEntiteDynamique(hector);
+        ordonnanceur.add(RealisateurDeplacement.getInstance());
 
         // Mouvement des colonnes
-        Colonnes c = new Colonnes();
+        RealisateurColonnes c = new RealisateurColonnes();
         c.addEntiteDynamique(colonne1);
         ordonnanceur.add(c);
 

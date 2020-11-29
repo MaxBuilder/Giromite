@@ -6,7 +6,7 @@ import modele.plateau.EntiteDynamique;
 import modele.plateau.Vide;
 
 // Intelligence artficielle basée sur la perception immédiate de l'entité
-public class IA extends RealisateurDeDeplacement {
+public class RealisateurIA extends RealisateurDeDeplacement {
     protected boolean realiserDeplacement() {
         boolean ret = false;
         for (EntiteDynamique e : lstEntitesDynamiques) {

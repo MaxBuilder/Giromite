@@ -5,14 +5,14 @@ import modele.plateau.*;
 /**
  * Controle4Directions permet d'appliquer une direction (connexion avec le clavier) à un ensemble d'entités dynamiques
  */
-public class Controle4Directions extends RealisateurDeDeplacement {
+public class RealisateurDeplacement extends RealisateurDeDeplacement {
     private Direction directionCourante;
     // Design pattern singleton
-    private static Controle4Directions c4d;
+    private static RealisateurDeplacement c4d;
 
-    public static Controle4Directions getInstance() {
+    public static RealisateurDeplacement getInstance() {
         if (c4d == null) {
-            c4d = new Controle4Directions();
+            c4d = new RealisateurDeplacement();
         }
         return c4d;
     }
