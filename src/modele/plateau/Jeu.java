@@ -53,7 +53,7 @@ public class Jeu {
     
     private void initialisationDesEntites() {
         // Ouverture fichier
-        File fichier = new File("data/niveaux/niveau_test2.txt");
+        File fichier = new File("data/niveaux/niveau_test.txt");
         Scanner scanner = null;
 
         try {
@@ -83,6 +83,8 @@ public class Jeu {
                     addEntite(new Plateforme(this, TypePlateforme.horizontale), x, y);
                 else if(it.equals("PV"))
                     addEntite(new Plateforme(this, TypePlateforme.verticale), x, y);
+                else if(it.equals("PI"))
+                    addEntite(new Plateforme(this, TypePlateforme.intermediaire), x, y);
                 else if(it.equals("PG"))
                     addEntite(new Plateforme(this, TypePlateforme.supportColonneGauche), x, y);
                 else if(it.equals("PD"))

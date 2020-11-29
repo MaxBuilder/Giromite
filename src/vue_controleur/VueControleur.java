@@ -36,8 +36,8 @@ public class VueControleur extends JFrame implements Observer {
     private ImageIcon icoHeroCorde;
     private ImageIcon icoVide;
     private ImageIcon icoMur;
-    private ImageIcon icoColonneV;
-    private ImageIcon icoColonneH;
+    private ImageIcon icoPlateformeV;
+    private ImageIcon icoPlateformeH;
     private ImageIcon icoSmick;
     private ImageIcon icoCorde;
     private ImageIcon icoBombe;
@@ -50,6 +50,7 @@ public class VueControleur extends JFrame implements Observer {
     private ImageIcon icoHautColonneRouge;
     private ImageIcon icoBasColonneRouge;
     private ImageIcon icoHeroMort;
+    private ImageIcon icoPlateformeInter;
 
     private JLabel[][] tabJLabel; // Cases graphiques
 
@@ -86,8 +87,8 @@ public class VueControleur extends JFrame implements Observer {
         icoMur = chargerIcone("data/Mur.png");
         icoSmick = chargerIcone("data/Smick.png");
         icoVide = chargerIcone("data/Vide.png");
-        icoColonneH = chargerIcone("data/PlateformeH.png");
-        icoColonneV = chargerIcone("data/PlateformeV.png");
+        icoPlateformeH = chargerIcone("data/PlateformeH.png");
+        icoPlateformeV = chargerIcone("data/PlateformeV.png");
         icoCorde = chargerIcone("data/Corde.png");
         icoHeroCorde = chargerIcone("data/HectorCorde.png");
         icoBombe = chargerIcone("data/Bombe.png");
@@ -100,6 +101,7 @@ public class VueControleur extends JFrame implements Observer {
         icoHautColonneRouge = chargerIcone("data/HautColonneRouge.png");
         icoBasColonneRouge = chargerIcone("data/BasColonneRouge.png");
         icoHeroMort = chargerIcone("data/HectorMort.png");
+        icoPlateformeInter = chargerIcone("data/PlateformeI.png");
     }
 
     private ImageIcon chargerIcone(String urlIcone) {
@@ -152,9 +154,11 @@ public class VueControleur extends JFrame implements Observer {
                 }
                 else if (jeu.getGrille()[x][y] instanceof Plateforme) {
                     if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.verticale)
-                        tabJLabel[x][y].setIcon(icoColonneV);
+                        tabJLabel[x][y].setIcon(icoPlateformeV);
                     else if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.horizontale)
-                        tabJLabel[x][y].setIcon(icoColonneH);
+                        tabJLabel[x][y].setIcon(icoPlateformeH);
+                    else if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.intermediaire)
+                        tabJLabel[x][y].setIcon(icoPlateformeInter);
                     else if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.supportColonneGauche)
                         tabJLabel[x][y].setIcon(icoSupportColonneGauche);
                     else if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.supportColonneDroite)
