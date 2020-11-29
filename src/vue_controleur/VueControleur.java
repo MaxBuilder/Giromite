@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import modele.deplacements.RealisateurDeplacement;
+import modele.deplacements.RealisateurMouvement;
 import modele.deplacements.Direction;
 import modele.plateau.*;
 import modele.plateau.entites_dynamiques.*;
@@ -68,12 +68,12 @@ public class VueControleur extends JFrame implements Observer {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_Q -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.gauche);
-                    case KeyEvent.VK_D -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.droite);
-                    case KeyEvent.VK_S -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.bas);
-                    case KeyEvent.VK_Z -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.haut);
-                    case KeyEvent.VK_F -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.colonneBleue);
-                    case KeyEvent.VK_R -> RealisateurDeplacement.getInstance().setDirectionCourante(Direction.colonneRouge);
+                    case KeyEvent.VK_Q -> RealisateurMouvement.getInstance().setDirectionCourante(Direction.gauche);
+                    case KeyEvent.VK_D -> RealisateurMouvement.getInstance().setDirectionCourante(Direction.droite);
+                    case KeyEvent.VK_S -> RealisateurMouvement.getInstance().setDirectionCourante(Direction.bas);
+                    case KeyEvent.VK_Z -> RealisateurMouvement.getInstance().setDirectionCourante(Direction.haut);
+                    case KeyEvent.VK_F -> RealisateurMouvement.getInstance().setDirectionCourante(Direction.colonneBleue);
+                    case KeyEvent.VK_R -> RealisateurMouvement.getInstance().setDirectionCourante(Direction.colonneRouge);
                 }
             }
         });

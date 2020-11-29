@@ -9,14 +9,14 @@ import modele.plateau.entites_statiques.Vide;
 /**
  * Controle4Directions permet d'appliquer une direction (connexion avec le clavier) à un ensemble d'entités dynamiques
  */
-public class RealisateurDeplacement extends RealisateurDeDeplacement {
+public class RealisateurMouvement extends RealisateurDeDeplacement {
     private Direction directionCourante;
     // Design pattern singleton
-    private static RealisateurDeplacement c4d;
+    private static RealisateurMouvement c4d;
 
-    public static RealisateurDeplacement getInstance() {
+    public static RealisateurMouvement getInstance() {
         if (c4d == null) {
-            c4d = new RealisateurDeplacement();
+            c4d = new RealisateurMouvement();
         }
         return c4d;
     }
@@ -38,8 +38,10 @@ public class RealisateurDeplacement extends RealisateurDeDeplacement {
             if (directionCourante != null) {
                 switch (directionCourante) {
                     case gauche, droite:
-                        if (e.avancerDirectionChoisie(directionCourante))
+                        if (e.regarderDansLaDirection(Direction.bas).peutServirDeSupport() || ((Heros) e).getEstSurCorde()) {
+                            e.avancerDirectionChoisie(directionCourante);
                             ret = true;
+                        }
                         break;
 
                     case haut:

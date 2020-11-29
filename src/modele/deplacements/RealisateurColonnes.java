@@ -17,7 +17,7 @@ public class RealisateurColonnes extends RealisateurDeDeplacement {
         boolean ret = false;
 
         // Mise à jour des évènements
-        Direction directionCourante = RealisateurDeplacement.getInstance().getDirectionCourante();
+        Direction directionCourante = RealisateurMouvement.getInstance().getDirectionCourante();
         if (directionCourante != null) {
             switch (directionCourante) {
                 case colonneBleue -> directionBleue = !directionBleue;

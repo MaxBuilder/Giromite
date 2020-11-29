@@ -75,8 +75,8 @@ public class Jeu {
         ordonnanceur.add(ia);
 
         // Mouvement du personnage
-        RealisateurDeplacement.getInstance().addEntiteDynamique(hector);
-        ordonnanceur.add(RealisateurDeplacement.getInstance());
+        RealisateurMouvement.getInstance().addEntiteDynamique(hector);
+        ordonnanceur.add(RealisateurMouvement.getInstance());
 
         // Mouvement des colonnes
         RealisateurColonnes c = new RealisateurColonnes();
