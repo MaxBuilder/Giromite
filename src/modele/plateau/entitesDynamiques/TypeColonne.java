@@ -1,4 +1,4 @@
-package modele.plateau;
+package modele.plateau.entitesDynamiques;
 
 public enum TypeColonne {
     bas, inter, haut

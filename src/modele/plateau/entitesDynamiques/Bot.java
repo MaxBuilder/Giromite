@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package modele.plateau;
+package modele.plateau.entitesDynamiques;
+
+import modele.plateau.EntiteDynamique;
+import modele.plateau.Jeu;
 
 /**
  * Ennemis (Smicks)

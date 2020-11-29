@@ -1,4 +1,4 @@
-package modele.plateau;
+package modele.plateau.entitesStatiques;
 
 public enum TypePlateforme {
     verticale,

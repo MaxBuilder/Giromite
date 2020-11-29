@@ -16,6 +16,8 @@ import javax.swing.*;
 import modele.deplacements.RealisateurDeplacement;
 import modele.deplacements.Direction;
 import modele.plateau.*;
+import modele.plateau.entitesDynamiques.*;
+import modele.plateau.entitesStatiques.*;
 
 
 /** Cette classe a deux fonctions :

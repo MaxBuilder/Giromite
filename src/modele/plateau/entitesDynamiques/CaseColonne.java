@@ -1,4 +1,7 @@
-package modele.plateau;
+package modele.plateau.entitesDynamiques;
+
+import modele.plateau.EntiteDynamique;
+import modele.plateau.Jeu;
 
 public class CaseColonne extends EntiteDynamique {
     private final CouleurColonne color;

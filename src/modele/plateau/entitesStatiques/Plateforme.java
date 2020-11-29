@@ -1,4 +1,7 @@
-package modele.plateau;
+package modele.plateau.entitesStatiques;
+
+import modele.plateau.EntiteStatique;
+import modele.plateau.Jeu;
 
 public class Plateforme extends EntiteStatique {
     private final TypePlateforme type;

@@ -1,9 +1,9 @@
 package modele.deplacements;
 
-import modele.plateau.Bot;
+import modele.plateau.entitesDynamiques.Bot;
 import modele.plateau.Entite;
 import modele.plateau.EntiteDynamique;
-import modele.plateau.Vide;
+import modele.plateau.entitesStatiques.Vide;
 
 // Intelligence artficielle basée sur la perception immédiate de l'entité
 public class RealisateurIA extends RealisateurDeDeplacement {

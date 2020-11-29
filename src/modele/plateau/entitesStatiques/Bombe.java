@@ -1,4 +1,7 @@
-package modele.plateau;
+package modele.plateau.entitesStatiques;
+
+import modele.plateau.EntiteStatique;
+import modele.plateau.Jeu;
 
 public class Bombe extends EntiteStatique {
     public Bombe(Jeu _jeu) { super(_jeu); }

@@ -1,6 +1,10 @@
 package modele.deplacements;
 
 import modele.plateau.*;
+import modele.plateau.entitesDynamiques.Heros;
+import modele.plateau.entitesStatiques.Bombe;
+import modele.plateau.entitesStatiques.Corde;
+import modele.plateau.entitesStatiques.Vide;
 
 /**
  * Controle4Directions permet d'appliquer une direction (connexion avec le clavier) à un ensemble d'entités dynamiques
