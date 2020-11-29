@@ -1,4 +1,4 @@
-import VueControleur.*;
+import vue_controleur.*;
 import modele.plateau.*;
 
 public class Main {
@@ -6,7 +6,7 @@ public class Main {
 	public static void main(String[] args) {
 		Jeu jeu = new Jeu();
         
-			VueControleurGyromite vc = new VueControleurGyromite(jeu);
+			VueControleur vc = new VueControleur(jeu);
 
 			jeu.getOrdonnanceur().addObserver(vc);
         

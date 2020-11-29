@@ -1,4 +1,4 @@
-package modele.plateau.entitesDynamiques;
+package modele.plateau.entites_dynamiques;
 
 import modele.plateau.EntiteDynamique;
 import modele.plateau.Jeu;

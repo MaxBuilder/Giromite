@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package modele.plateau.entitesDynamiques;
+package modele.plateau.entites_dynamiques;
 
 import modele.plateau.EntiteDynamique;
 import modele.plateau.Jeu;

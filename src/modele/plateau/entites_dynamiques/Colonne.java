@@ -1,4 +1,4 @@
-package modele.plateau.entitesDynamiques;
+package modele.plateau.entites_dynamiques;
 
 import modele.plateau.EntiteDynamique;
 import modele.plateau.Jeu;
@@ -25,5 +25,5 @@ public class Colonne extends EntiteDynamique {
 
     public boolean peutEtreEcrase() { return false; }
     public boolean peutServirDeSupport() { return true; }
-    public boolean peutPermettreDeMonterDescendre() { return false; };
+    public boolean peutPermettreDeMonterDescendre() { return false; }
 }

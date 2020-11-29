@@ -6,8 +6,8 @@
 package modele.plateau;
 
 import modele.deplacements.*;
-import modele.plateau.entitesDynamiques.*;
-import modele.plateau.entitesStatiques.*;
+import modele.plateau.entites_dynamiques.*;
+import modele.plateau.entites_statiques.*;
 
 import java.awt.Point;
 import java.util.HashMap;

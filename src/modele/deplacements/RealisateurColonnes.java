@@ -1,8 +1,8 @@
 package modele.deplacements;
 
-import modele.plateau.entitesDynamiques.CaseColonne;
-import modele.plateau.entitesDynamiques.Colonne;
-import modele.plateau.entitesDynamiques.CouleurColonne;
+import modele.plateau.entites_dynamiques.CaseColonne;
+import modele.plateau.entites_dynamiques.Colonne;
+import modele.plateau.entites_dynamiques.CouleurColonne;
 import modele.plateau.EntiteDynamique;
 
 public class RealisateurColonnes extends RealisateurDeDeplacement {

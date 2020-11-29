@@ -1,4 +1,4 @@
-package VueControleur;
+package vue_controleur;
 
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
@@ -16,8 +16,8 @@ import javax.swing.*;
 import modele.deplacements.RealisateurDeplacement;
 import modele.deplacements.Direction;
 import modele.plateau.*;
-import modele.plateau.entitesDynamiques.*;
-import modele.plateau.entitesStatiques.*;
+import modele.plateau.entites_dynamiques.*;
+import modele.plateau.entites_statiques.*;
 
 
 /** Cette classe a deux fonctions :
@@ -25,7 +25,7 @@ import modele.plateau.entitesStatiques.*;
  *  (2) Controleur : écouter les évènements clavier et déclencher le traitement adapté sur le modèle (flèches direction Pacman, etc.))
  *
  */
-public class VueControleurGyromite extends JFrame implements Observer {
+public class VueControleur extends JFrame implements Observer {
     private final Jeu jeu;
 
     private final int sizeX;
@@ -53,7 +53,7 @@ public class VueControleurGyromite extends JFrame implements Observer {
     private JLabel[][] tabJLabel; // Cases graphiques
 
 
-    public VueControleurGyromite(Jeu _jeu) {
+    public VueControleur(Jeu _jeu) {
         sizeX = Jeu.SIZE_X;
         sizeY = Jeu.SIZE_Y;
         jeu = _jeu;
@@ -105,7 +105,7 @@ public class VueControleurGyromite extends JFrame implements Observer {
         try {
             image = ImageIO.read(new File(urlIcone));
         } catch (IOException ex) {
-            Logger.getLogger(VueControleurGyromite.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VueControleur.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
 
