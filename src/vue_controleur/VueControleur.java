@@ -182,7 +182,7 @@ public class VueControleur extends JFrame implements Observer {
                 else if (jeu.getGrille()[x][y] instanceof Corde) {
                     tabJLabel[x][y].setIcon(icoCorde);
                 }
-                else tabJLabel[x][y].setIcon(icoVide); // Cas par défaut
+                else tabJLabel[x][y].setIcon(icoVide); // Cas par défaut (vide)
             }
         }
     }

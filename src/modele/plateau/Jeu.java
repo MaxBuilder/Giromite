@@ -10,7 +10,10 @@ import modele.plateau.entites_dynamiques.*;
 import modele.plateau.entites_statiques.*;
 
 import java.awt.Point;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /** Actuellement, cette classe gère les postions
  * (ajouter conditions de victoire, chargement du plateau, etc.)
@@ -46,95 +49,100 @@ public class Jeu {
         return grilleEntites;
     }
     
-    private void initialisationDesEntites() { // A CHANGER (serialization)
-        Heros hector = new Heros(this);
-        addEntite(hector, 2, 1);
+    private void initialisationDesEntites() {
+        // Ouverture fichier
+        File fichier = new File("data/niveaux/niveau_test.txt");
+        Scanner scanner = null;
 
-        Bot smick = new Bot(this);
-        addEntite(smick, 18, 5);
+        try {
+            scanner = new Scanner(fichier);
+        } catch (FileNotFoundException e) {
+            System.out.println("Fichier de niveau introuvable.");
+            System.exit(0);
+        }
 
-        CaseColonne case1 = new CaseColonne(this, CouleurColonne.bleue, TypeColonne.haut);
-        CaseColonne case2 = new CaseColonne(this, CouleurColonne.bleue, TypeColonne.inter);
-        CaseColonne case3 = new CaseColonne(this, CouleurColonne.bleue, TypeColonne.inter);
-        CaseColonne case4 = new CaseColonne(this, CouleurColonne.bleue, TypeColonne.bas);
-        Colonne colonne1 = new Colonne(this, CouleurColonne.bleue);
-        colonne1.ajouterColonne(case1);
-        colonne1.ajouterColonne(case2);
-        colonne1.ajouterColonne(case3);
-        colonne1.ajouterColonne(case4);
-
-        // Component gravité
+        // Déclaration des réalisateurs de mouvement
         RealisateurGravite g = new RealisateurGravite();
-        g.addEntiteDynamique(hector);
-        g.addEntiteDynamique(smick);
-        ordonnanceur.add(g);
-
-        // Mouvement des bots
         RealisateurIA ia = new RealisateurIA();
-        //ia.addEntiteDynamique(smick); // Désactivé pour le moment
-        ordonnanceur.add(ia);
-
-        // Mouvement du personnage
-        RealisateurMouvement.getInstance().addEntiteDynamique(hector);
-        ordonnanceur.add(RealisateurMouvement.getInstance());
-
-        // Mouvement des colonnes
         RealisateurColonnes c = new RealisateurColonnes();
-        c.addEntiteDynamique(colonne1);
+
+        // Table pour les colonnes
+        HashMap<Integer, Colonne> TableColonne = new HashMap<>();
+
+        // Traitement du fichier texte
+        for(int y = 0 ; y < SIZE_Y ; y++) {
+            for(int x = 0 ; x < SIZE_X ; x++) {
+                String it = scanner.next();         // PE arranger les conditons par ordre d'occurence
+                // Statiques
+                if(it.equals("M"))
+                    addEntite(new Mur(this), x, y);
+                else if(it.equals("V"))
+                    addEntite(new Vide(this), x, y);
+                else if(it.equals("C"))
+                    addEntite(new Corde(this), x, y);
+                else if(it.equals("B"))
+                    addEntite(new Bombe(this), x, y);
+                else if(it.equals("PH"))
+                    addEntite(new Plateforme(this, TypePlateforme.horizontale), x, y);
+                else if(it.equals("PV"))
+                    addEntite(new Plateforme(this, TypePlateforme.verticale), x, y);
+                else if(it.equals("PG"))
+                    addEntite(new Plateforme(this, TypePlateforme.supportColonneGauche), x, y);
+                else if(it.equals("PD"))
+                    addEntite(new Plateforme(this, TypePlateforme.supportColonneDroite), x, y);
+                // Dynamiques
+                else if(it.equals("H")) {
+                    Heros hector = new Heros(this);
+                    RealisateurMouvement.getInstance().addEntiteDynamique(hector);
+                    g.addEntiteDynamique(hector);
+                    addEntite(hector, x, y);
+                }
+                else if(it.equals("S")) {
+                    Bot smick = new Bot(this);
+                    ia.addEntiteDynamique(smick);
+                    g.addEntiteDynamique(smick);
+                    addEntite(smick, x, y);
+                }
+                else if(it.matches("C[BR][HBI][1-9]")) {
+                    CouleurColonne couleur = null;
+                    TypeColonne type = null;
+                    if(it.matches("CB[HBI][1-9]"))
+                        couleur = CouleurColonne.bleue;
+                    else if(it.matches("CR[HBI][1-9]"))
+                        couleur = CouleurColonne.rouge;
+                    if(it.matches("C[BR]H[1-9]"))
+                        type = TypeColonne.haut;
+                    else if(it.matches("C[BR]I[1-9]"))
+                        type = TypeColonne.inter;
+                    else if(it.matches("C[BR]B[1-9]"))
+                        type = TypeColonne.bas;
+                    CaseColonne caseColonne = new CaseColonne(this, couleur, type); // Création de la case
+                    addEntite(caseColonne, x, y);
+
+                    // Ajout de la case à sa colonne si elle existe, sinon création
+                    int numColonne = Character.getNumericValue(it.charAt(3));
+                    if(TableColonne.get(numColonne) != null)
+                        TableColonne.get(numColonne).ajouterColonne(caseColonne);
+                    else {
+                        TableColonne.put(numColonne, new Colonne(this, couleur));
+                        TableColonne.get(numColonne).ajouterColonne(caseColonne);
+                    }
+                }
+
+                // Mise de l'entité précédente à vide
+                if(grilleEntites[x][y] instanceof EntiteDynamique)
+                    ((EntiteDynamique) grilleEntites[x][y]).setEntitePrecedente(new Vide(this));
+            }
+        }
+
+        // Ajout des colonnes à leur réalisateur
+        TableColonne.forEach((id, col) -> c.addEntiteDynamique(col));
+
+        // Ajout des réalisateurs à l'ordonnanceur
+        ordonnanceur.add(g);
+        ordonnanceur.add(ia);
+        ordonnanceur.add(RealisateurMouvement.getInstance());
         ordonnanceur.add(c);
-
-        // Placement des entités de la map (à changer) :
-        for(int x = 0 ; x < 20 ; x++) {
-            for(int y = 0 ; y < 10 ; y++)
-                addEntite(new Vide(this), x, y);
-        }
-
-        // Murs extérieurs horizontaux
-        for (int x = 0; x < 20; x++) {
-            addEntite(new Mur(this), x, 0);
-            addEntite(new Mur(this), x, 9);
-        }
-
-        // Murs extérieurs verticaux
-        for (int y = 1; y < 9; y++) {
-            addEntite(new Mur(this), 0, y);
-            addEntite(new Mur(this), 19, y);
-        }
-
-        // Reste de la map (Plateformes etc)
-        addEntite(new Plateforme(this, TypePlateforme.horizontale), 6, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontale), 7, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontale), 8, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontale), 9, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontale), 10, 5);
-        addEntite(new Plateforme(this, TypePlateforme.horizontale), 11, 5);
-        addEntite(new Plateforme(this, TypePlateforme.supportColonneGauche), 12, 5);
-        //addEntite(new Plateforme(this, TypePlateforme.horizontale), 13, 5);
-        addEntite(new Plateforme(this, TypePlateforme.supportColonneDroite), 14, 5);
-        //addEntite(new Plateforme(this, TypePlateforme.horizontale), 12, 5);
-        //addEntite(new Plateforme(this, TypePlateforme.horizontale), 13, 5);
-        //addEntite(new Plateforme(this, TypePlateforme.verticale), 13, 4);
-        //addEntite(new Plateforme(this, TypePlateforme.verticale), 13, 3);
-        addEntite(new Plateforme(this, TypePlateforme.verticale), 10, 6);
-        addEntite(new Plateforme(this, TypePlateforme.verticale), 10, 7);
-        addEntite(new Plateforme(this, TypePlateforme.verticale), 10, 8);
-        addEntite(new Plateforme(this, TypePlateforme.horizontale), 13, 1);
-        addEntite(case1, 13, 2);
-        addEntite(case2, 13, 3);
-        addEntite(case3, 13, 4);
-        addEntite(case4, 13, 5);
-        addEntite(new Corde(this), 5, 1);
-        addEntite(new Corde(this), 5, 2);
-        addEntite(new Corde(this), 5, 3);
-        addEntite(new Corde(this), 5, 4);
-        addEntite(new Corde(this), 5, 5);
-        addEntite(new Corde(this), 5, 6);
-        addEntite(new Corde(this), 5, 7);
-        addEntite(new Corde(this), 5, 8);
-        addEntite(new Corde(this), 9, 6);
-        addEntite(new Corde(this), 9, 7);
-        addEntite(new Corde(this), 9, 8);
-        addEntite(new Bombe(this), 4, 8);
     }
 
     private void addEntite(Entite e, int x, int y) {
@@ -206,9 +214,8 @@ public class Jeu {
     private Entite objetALaPosition(Point p) {
         Entite retour = null;
         
-        if (contenuDansGrille(p)) {
+        if (contenuDansGrille(p))
             retour = grilleEntites[p.x][p.y];
-        }
         
         return retour;
     }

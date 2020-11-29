@@ -7,6 +7,7 @@ package modele.plateau.entites_dynamiques;
 
 import modele.plateau.EntiteDynamique;
 import modele.plateau.Jeu;
+import modele.plateau.entites_statiques.Vide;
 
 /**
  * Ennemis (Smicks)
@@ -17,6 +18,7 @@ public class Bot extends EntiteDynamique {
         directionV = true;
         directionH = false;
         estSurCorde = false;
+        setEntitePrecedente(new Vide(_jeu));
     }
 
     // Fonctions / variables de changement de direction
