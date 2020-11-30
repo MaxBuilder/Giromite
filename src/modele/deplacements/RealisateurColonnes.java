@@ -27,7 +27,7 @@ public class RealisateurColonnes extends RealisateurDeDeplacement {
             Colonne col = (Colonne) e;
             if(col.getCouleur() == CouleurColonne.bleue && directionBleue || col.getCouleur() == CouleurColonne.rouge && directionRouge) { // Monter
                 for(CaseColonne c : col.cases) {
-                    if (c.regarderDansLaDirection(Direction.haut) instanceof Heros || c.regarderDansLaDirection(Direction.haut) instanceof Bot) {
+                    if (c.regarderDansLaDirection(Direction.haut).peutEtreEcrase()) {
                         EntiteDynamique entiteDynamique = (EntiteDynamique) c.regarderDansLaDirection(Direction.haut);
                         if (entiteDynamique.regarderDansLaDirection(Direction.haut).peutServirDeSupport())
                             e.getJeu().supprimerEntite(entiteDynamique);
@@ -43,7 +43,7 @@ public class RealisateurColonnes extends RealisateurDeDeplacement {
             else { // Descendre
                 for(int i = col.cases.size() - 1 ; i >= 0 ; i--) {
                     CaseColonne c = col.cases.get(i);
-                    if (c.regarderDansLaDirection(Direction.bas) instanceof Heros || c.regarderDansLaDirection(Direction.bas) instanceof Bot) {
+                    if (c.regarderDansLaDirection(Direction.bas).peutEtreEcrase()) {
                         EntiteDynamique entiteDynamique = (EntiteDynamique) c.regarderDansLaDirection(Direction.bas);
                         if(entiteDynamique.regarderDansLaDirection(Direction.bas).peutServirDeSupport())
                             e.getJeu().supprimerEntite(entiteDynamique);
