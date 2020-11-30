@@ -1,6 +1,5 @@
 package modele.plateau;
 
-import modele.deplacements.RealisateurMouvement;
 import modele.plateau.entites_statiques.Bombe;
 
 import java.io.File;

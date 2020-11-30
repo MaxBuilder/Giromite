@@ -12,7 +12,6 @@ public class CaseColonne extends EntiteDynamique {
         super(_jeu);
         color = _color;
         type = _type;
-        //setEntitePrecedente(new Vide(jeu));
     }
 
     public CouleurColonne getCouleur() { return color; }
