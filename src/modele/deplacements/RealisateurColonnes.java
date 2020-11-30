@@ -11,6 +11,11 @@ public class RealisateurColonnes extends RealisateurDeDeplacement {
         directionRouge = true;
     }
 
+    public void reset() {
+        directionBleue = true;
+        directionRouge = true;
+    }
+
     protected boolean realiserDeplacement() {
         boolean ret = false;
 

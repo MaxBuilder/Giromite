@@ -33,7 +33,11 @@ public class RealisateurMouvement extends RealisateurDeDeplacement {
             // Gestion des collions :
             if(e.getEntitePrecedente() instanceof Bombe) {
                 e.setEntitePrecedente(new Vide(e.getJeu()));
+                e.getJeu().getGameplay().recupererBombe();
             }
+            if(e.getJeu().getGameplay().verifier(((Heros) e).getEstMort()))
+                return true;
+
             if(e.regarderDansLaDirection(Direction.gauche) instanceof Bot || e.regarderDansLaDirection(Direction.droite) instanceof Bot)
                 ((Heros) e).setEstMort(true);
 

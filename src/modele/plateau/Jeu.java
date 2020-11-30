@@ -27,7 +27,7 @@ public class Jeu {
     private final HashMap<Entite, Integer> cmptDepl = new HashMap<>();
 
     private final HashMap<Entite, Point> map = new HashMap<>(); // permet de récupérer la position d'une entité à partir de sa référence
-    private final Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité  d à partir de ses coordonnées
+    private Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité  d à partir de ses coordonnées
 
     RealisateurGravite g = new RealisateurGravite();
     RealisateurIA ia = new RealisateurIA();
@@ -35,8 +35,16 @@ public class Jeu {
 
     private final Ordonnanceur ordonnanceur = new Ordonnanceur(this);
 
+    private final Gameplay gameplay = new Gameplay(this);
+
     public Jeu() {
-        initialisationDesEntites();
+        gameplay.changerNiveau();
+
+        // Ajout des réalisateurs à l'ordonnanceur
+        ordonnanceur.add(g);
+        ordonnanceur.add(RealisateurMouvement.getInstance());
+        ordonnanceur.add(c);
+        ordonnanceur.add(ia);
     }
 
     public void resetCmptDepl() {
@@ -50,21 +58,31 @@ public class Jeu {
     public Entite[][] getGrille() {
         return grilleEntites;
     }
+
+    public void viderEntites() {
+        grilleEntites = new Entite[SIZE_X][SIZE_Y];
+
+        System.out.println("Clear");
+        g.clearRealisateur();
+        ia.clearRealisateur();
+        c.clearRealisateur();
+        RealisateurMouvement.getInstance().clearRealisateur();
+    }
     
-    private void initialisationDesEntites() {
-        // Ouverture fichier
-        File fichier = new File("data/niveaux/niveau_test.txt");
+    public void initialisationDesEntites(String cheminNiveau) {
+        System.out.println("Chargement du niveau " + cheminNiveau);
+        File fichier = new File(cheminNiveau);
         Scanner scanner = null;
 
         try {
             scanner = new Scanner(fichier);
         } catch (FileNotFoundException e) {
-            System.out.println("Fichier de niveau introuvable.");
+            System.out.println("Fichier " + cheminNiveau + " introuvable");
             System.exit(0);
         }
 
         // Table pour les colonnes
-        HashMap<Integer, Colonne> TableColonne = new HashMap<>();
+        HashMap<Integer, Colonne> tableColonne = new HashMap<>();
 
         // Traitement du fichier texte
         for(int y = 0 ; y < SIZE_Y ; y++) {
@@ -120,11 +138,11 @@ public class Jeu {
 
                     // Ajout de la case à sa colonne si elle existe, sinon création
                     int numColonne = Character.getNumericValue(it.charAt(3));
-                    if(TableColonne.get(numColonne) != null)
-                        TableColonne.get(numColonne).ajouterColonne(caseColonne);
+                    if(tableColonne.get(numColonne) != null)
+                        tableColonne.get(numColonne).ajouterColonne(caseColonne);
                     else {
-                        TableColonne.put(numColonne, new Colonne(this, couleur));
-                        TableColonne.get(numColonne).ajouterColonne(caseColonne);
+                        tableColonne.put(numColonne, new Colonne(this, couleur));
+                        tableColonne.get(numColonne).ajouterColonne(caseColonne);
                     }
                 }
 
@@ -135,13 +153,8 @@ public class Jeu {
         }
 
         // Ajout des colonnes à leur réalisateur
-        TableColonne.forEach((id, col) -> c.addEntiteDynamique(col));
-
-        // Ajout des réalisateurs à l'ordonnanceur
-        ordonnanceur.add(g);
-        ordonnanceur.add(RealisateurMouvement.getInstance());
-        ordonnanceur.add(c);
-        ordonnanceur.add(ia);
+        tableColonne.forEach((id, col) -> c.addEntiteDynamique(col));
+        c.reset();
     }
 
     private void addEntite(Entite e, int x, int y) { // A renommer
@@ -160,9 +173,8 @@ public class Jeu {
         if (e instanceof Bot)
             ia.removeEntiteDynamique(e);
         else if(e instanceof Heros)
-            RealisateurMouvement.getInstance().removeEntiteDynamique(e);
+            ((Heros) e).setEstMort(true);
     }
-
 
     public Entite regarderDansLaDirection(Entite e, Direction d) {
         Point positionEntite = map.get(e);
@@ -225,4 +237,6 @@ public class Jeu {
     public Ordonnanceur getOrdonnanceur() {
         return ordonnanceur;
     }
+
+    public Gameplay getGameplay() { return gameplay; }
 }

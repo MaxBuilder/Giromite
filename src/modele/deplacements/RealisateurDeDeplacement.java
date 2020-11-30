@@ -1,6 +1,5 @@
 package modele.deplacements;
 
-import modele.plateau.Entite;
 import modele.plateau.EntiteDynamique;
 
 import java.util.ArrayList;
@@ -14,4 +13,5 @@ public abstract class RealisateurDeDeplacement {
 
     public void addEntiteDynamique(EntiteDynamique ed) { lstEntitesDynamiques.add(ed); }
     public void removeEntiteDynamique(EntiteDynamique ed) { lstEntitesDynamiques.remove(ed); }
+    public void clearRealisateur() { lstEntitesDynamiques.clear(); }
 }
