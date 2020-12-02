@@ -146,7 +146,7 @@ public class VueControleur extends JFrame implements Observer {
     private void placerLesComposantsGraphiques() {
         setTitle("Gyromite");
         setSize(496, 303);
-        //setResizable(false);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JComponent grilleJLabels = new JPanel(new GridLayout(tailleVueY + 1, tailleVueX));
