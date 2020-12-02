@@ -14,11 +14,17 @@ public class Gameplay {
     private int niveauActuel;
     private int nombreBombeTotal;
     private int nombreBombeActuel;
+    private int vies;
+    private int score;
+    private int temps;
 
     public Gameplay(Jeu _jeu) {
         jeu = _jeu;
         listeNiveau = new ArrayList<>();
         niveauActuel = 0;
+        temps = 999;
+        score = 0;
+        vies = 5;
 
         // Détermination du nombre de niveaux et chargement dans le tableau
         File fichier = new File("data/niveaux/niveaux.txt");
@@ -50,14 +56,18 @@ public class Gameplay {
     }
 
     public boolean verifier(boolean dead) {
-        if(dead) {
+        if(dead && vies > 0) {
             resetNiveau();
+            vies--;
             return true;
         }
         else {
             if(nombreBombeActuel == nombreBombeTotal)
                 changerNiveau();
         }
+        if(vies == 0)
+            System.exit(0);
+        decrementerTemps();
         return false;
     }
 
@@ -93,4 +103,9 @@ public class Gameplay {
     public void recupererBombe() {
         nombreBombeActuel++;
     }
+
+    public int getScore() { return score; }
+    public int getTemps() { return temps; }
+    public void incrementerScore(int val) { score += val; }
+    public void decrementerTemps() { temps--; }
 }

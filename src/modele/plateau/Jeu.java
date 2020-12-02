@@ -57,7 +57,7 @@ public class Jeu {
     }
 
     public void viderEntites() {
-        grilleEntites = new Entite[SIZE_X][SIZE_Y];
+        grilleEntites = null;
 
         System.out.println("Clear");
         g.clearRealisateur();
@@ -171,8 +171,10 @@ public class Jeu {
         map.remove(e);
 
         g.removeEntiteDynamique(e);
-        if (e instanceof Bot)
+        if (e instanceof Bot) {
             ia.removeEntiteDynamique(e);
+            getGameplay().incrementerScore(10);
+        }
         else if(e instanceof Heros)
             ((Heros) e).setEstMort(true);
     }
@@ -235,7 +237,11 @@ public class Jeu {
         return retour;
     }
 
-    public int getPositionPersonnage() { return map.get(hector).x; }
+    public int getPositionPersonnage() {
+        if(map.get(hector) != null)
+            return map.get(hector).x;
+        else return 0;
+    }
 
     public Ordonnanceur getOrdonnanceur() {
         return ordonnanceur;

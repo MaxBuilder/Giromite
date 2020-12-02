@@ -34,6 +34,7 @@ public class RealisateurMouvement extends RealisateurDeDeplacement {
             if(e.getEntitePrecedente() instanceof Bombe) {
                 e.setEntitePrecedente(new Vide(e.getJeu()));
                 e.getJeu().getGameplay().recupererBombe();
+                e.getJeu().getGameplay().incrementerScore(20);
             }
             if(e.getJeu().getGameplay().verifier(((Heros) e).getEstMort()))
                 return true;

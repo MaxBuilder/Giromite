@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -32,6 +33,8 @@ public class VueControleur extends JFrame implements Observer {
     private final int tailleVueY = 10;
     private int curseur;
 
+    private JLabel[][] tabJLabel; // Cases graphiques
+
     // Icones affichées dans la grille
     private ImageIcon icoHero;
     private ImageIcon icoHeroCorde;
@@ -53,7 +56,14 @@ public class VueControleur extends JFrame implements Observer {
     private ImageIcon icoHeroMort;
     private ImageIcon icoPlateformeInter;
 
-    private JLabel[][] tabJLabel; // Cases graphiques
+    // Icones du compteur
+    private ArrayList<ImageIcon> icoChiffres = new ArrayList<>();
+    private ImageIcon icoPoints;
+    private ImageIcon icoP;
+    private ImageIcon icoT;
+    private ImageIcon icoCompteurInter;
+    private ImageIcon icoCompteurGauche;
+    private ImageIcon icoCompteurDroite;
 
     public VueControleur(Jeu _jeu) {
         jeu = _jeu;
@@ -62,7 +72,6 @@ public class VueControleur extends JFrame implements Observer {
         placerLesComposantsGraphiques();
         ajouterEcouteurClavier();
         mettreAJourAffichage(); // Première initiation pour ne pas avoir de frame blanche
-
         }
 
     private void ajouterEcouteurClavier() {
@@ -101,6 +110,24 @@ public class VueControleur extends JFrame implements Observer {
         icoBasColonneRouge = chargerIcone("data/BasColonneRouge.png");
         icoHeroMort = chargerIcone("data/HectorMort.png");
         icoPlateformeInter = chargerIcone("data/PlateformeI.png");
+
+        // Icones du compteur
+        icoCompteurDroite = chargerIcone("data/compteur/droite.png");
+        icoCompteurGauche = chargerIcone("data/compteur/gauche.png");
+        icoCompteurInter = chargerIcone("data/compteur/inter.png");
+        icoP = chargerIcone("data/compteur/P.png");
+        icoT = chargerIcone("data/compteur/T.png");
+        icoPoints = chargerIcone("data/compteur/points.png");
+        icoChiffres.add(chargerIcone("data/compteur/zero.png"));
+        icoChiffres.add(chargerIcone("data/compteur/un.png"));
+        icoChiffres.add(chargerIcone("data/compteur/deux.png"));
+        icoChiffres.add(chargerIcone("data/compteur/trois.png"));
+        icoChiffres.add(chargerIcone("data/compteur/quatre.png"));
+        icoChiffres.add(chargerIcone("data/compteur/cinq.png"));
+        icoChiffres.add(chargerIcone("data/compteur/six.png"));
+        icoChiffres.add(chargerIcone("data/compteur/sept.png"));
+        icoChiffres.add(chargerIcone("data/compteur/huit.png"));
+        icoChiffres.add(chargerIcone("data/compteur/neuf.png"));
     }
 
     private ImageIcon chargerIcone(String urlIcone) {
@@ -118,22 +145,53 @@ public class VueControleur extends JFrame implements Observer {
 
     private void placerLesComposantsGraphiques() {
         setTitle("Gyromite");
-        setSize(500, 280);
-        setResizable(false);
+        setSize(496, 303);
+        //setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JComponent grilleJLabels = new JPanel(new GridLayout(tailleVueY, tailleVueX)); // grilleJLabels va contenir les cases graphiques et les positionner sous la forme d'une grille
-        tabJLabel = new JLabel[tailleVueX][tailleVueY];
+        JComponent grilleJLabels = new JPanel(new GridLayout(tailleVueY + 1, tailleVueX));
+        tabJLabel = new JLabel[tailleVueX][tailleVueY + 1];
 
-        for (int y = 0 ; y < tailleVueY ; y++) {
+        for (int y = 0 ; y < tailleVueY + 1; y++) {
             for (int x = 0 ; x < tailleVueX ; x++) {
                 JLabel jlab = new JLabel();
-                tabJLabel[x][y] = jlab; // on conserve les cases graphiques dans tabJLabel pour avoir un accès pratique à celles-ci (voir mettreAJourAffichage() )
+                tabJLabel[x][y] = jlab;
                 tabJLabel[x][y].setSize(24, 24);
                 grilleJLabels.add(jlab);
             }
         }
         add(grilleJLabels);
+    }
+
+    private void mettreAJourAffichageScores() {
+        tabJLabel[0][0].setIcon(icoCompteurInter);
+        tabJLabel[1][0].setIcon(icoCompteurInter);
+        tabJLabel[2][0].setIcon(icoCompteurGauche);
+        tabJLabel[3][0].setIcon(icoP);
+        tabJLabel[4][0].setIcon(icoPoints);
+        int score = jeu.getGameplay().getScore();
+        int a = score / 100;
+        int b = score / 10 % 10;
+        int c = score % 10;
+        tabJLabel[5][0].setIcon(icoChiffres.get(a));
+        tabJLabel[6][0].setIcon(icoChiffres.get(b));
+        tabJLabel[7][0].setIcon(icoChiffres.get(c));
+        tabJLabel[8][0].setIcon(icoCompteurDroite);
+        tabJLabel[9][0].setIcon(icoCompteurInter);
+        tabJLabel[10][0].setIcon(icoCompteurInter);
+        tabJLabel[11][0].setIcon(icoCompteurGauche);
+        tabJLabel[12][0].setIcon(icoT);
+        tabJLabel[13][0].setIcon(icoPoints);
+        int temps = jeu.getGameplay().getTemps();
+        a = temps / 100;
+        b = temps / 10 % 10;
+        c = temps % 10;
+        tabJLabel[14][0].setIcon(icoChiffres.get(a));
+        tabJLabel[15][0].setIcon(icoChiffres.get(b));
+        tabJLabel[16][0].setIcon(icoChiffres.get(c));
+        tabJLabel[17][0].setIcon(icoCompteurDroite);
+        tabJLabel[18][0].setIcon(icoCompteurInter);
+        tabJLabel[19][0].setIcon(icoCompteurInter);
     }
 
     private void mettreAJourCurseur() {
@@ -146,60 +204,60 @@ public class VueControleur extends JFrame implements Observer {
     }
 
     private void mettreAJourAffichage() {
-
-        for (int x = 0 ; x < tailleVueX; x++) {
+        for (int x = 0 ; x < tailleVueX ; x++) {
             for (int y = 0 ; y < tailleVueY ; y++) {
                 int xGrille = curseur + x;
-                if (jeu.getGrille()[xGrille][y] instanceof Heros) {
-                    if(((Heros) jeu.getGrille()[xGrille][y]).getEstMort())
-                        tabJLabel[x][y].setIcon(icoHeroMort);
-                    else if(((Heros) jeu.getGrille()[xGrille][y]).getEstSurCorde())
-                        tabJLabel[x][y].setIcon(icoHeroCorde);
-                    else tabJLabel[x][y].setIcon(icoHero);
+                Entite e = jeu.getGrille()[xGrille][y];
+                if (e instanceof Heros) {
+                    if(((Heros) e).getEstMort())
+                        tabJLabel[x][y + 1].setIcon(icoHeroMort);
+                    else if(((Heros) e).getEstSurCorde())
+                        tabJLabel[x][y + 1].setIcon(icoHeroCorde);
+                    else tabJLabel[x][y + 1].setIcon(icoHero);
                 }
-                else if (jeu.getGrille()[xGrille][y] instanceof Mur) {
-                    tabJLabel[x][y].setIcon(icoMur);
+                else if (e instanceof Mur) {
+                    tabJLabel[x][y + 1].setIcon(icoMur);
                 }
-                else if (jeu.getGrille()[xGrille][y] instanceof Plateforme) {
-                    if(((Plateforme) jeu.getGrille()[xGrille][y]).getType() == TypePlateforme.verticale)
-                        tabJLabel[x][y].setIcon(icoPlateformeV);
-                    else if(((Plateforme) jeu.getGrille()[xGrille][y]).getType() == TypePlateforme.horizontale)
-                        tabJLabel[x][y].setIcon(icoPlateformeH);
-                    else if(((Plateforme) jeu.getGrille()[xGrille][y]).getType() == TypePlateforme.intermediaire)
-                        tabJLabel[x][y].setIcon(icoPlateformeInter);
-                    else if(((Plateforme) jeu.getGrille()[xGrille][y]).getType() == TypePlateforme.supportColonneGauche)
-                        tabJLabel[x][y].setIcon(icoSupportColonneGauche);
-                    else if(((Plateforme) jeu.getGrille()[xGrille][y]).getType() == TypePlateforme.supportColonneDroite)
-                        tabJLabel[x][y].setIcon(icoSupportColonneDroite);
+                else if (e instanceof Plateforme) {
+                    if(((Plateforme) e).getType() == TypePlateforme.verticale)
+                        tabJLabel[x][y + 1].setIcon(icoPlateformeV);
+                    else if(((Plateforme) e).getType() == TypePlateforme.horizontale)
+                        tabJLabel[x][y + 1].setIcon(icoPlateformeH);
+                    else if(((Plateforme) e).getType() == TypePlateforme.intermediaire)
+                        tabJLabel[x][y + 1].setIcon(icoPlateformeInter);
+                    else if(((Plateforme) e).getType() == TypePlateforme.supportColonneGauche)
+                        tabJLabel[x][y + 1].setIcon(icoSupportColonneGauche);
+                    else if(((Plateforme) e).getType() == TypePlateforme.supportColonneDroite)
+                        tabJLabel[x][y + 1].setIcon(icoSupportColonneDroite);
                 }
-                else if(jeu.getGrille()[xGrille][y] instanceof CaseColonne) {
-                    if(((CaseColonne) jeu.getGrille()[xGrille][y]).getCouleur() == CouleurColonne.bleue) {
-                        if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.bas)
-                            tabJLabel[x][y].setIcon(icoBasColonneBleue);
-                        else if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.inter)
-                            tabJLabel[x][y].setIcon(icoColonneBleue);
-                        else if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.haut)
-                            tabJLabel[x][y].setIcon(icoHautColonneBleue);
+                else if(e instanceof CaseColonne) {
+                    if(((CaseColonne) e).getCouleur() == CouleurColonne.bleue) {
+                        if(((CaseColonne) e).getType() == TypeColonne.bas)
+                            tabJLabel[x][y + 1].setIcon(icoBasColonneBleue);
+                        else if(((CaseColonne) e).getType() == TypeColonne.inter)
+                            tabJLabel[x][y + 1].setIcon(icoColonneBleue);
+                        else if(((CaseColonne) e).getType() == TypeColonne.haut)
+                            tabJLabel[x][y + 1].setIcon(icoHautColonneBleue);
                     }
                     else {
-                        if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.bas)
-                            tabJLabel[x][y].setIcon(icoBasColonneRouge);
-                        else if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.inter)
-                            tabJLabel[x][y].setIcon(icoColonneRouge);
-                        else if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.haut)
-                            tabJLabel[x][y].setIcon(icoHautColonneRouge);
+                        if(((CaseColonne) e).getType() == TypeColonne.bas)
+                            tabJLabel[x][y + 1].setIcon(icoBasColonneRouge);
+                        else if(((CaseColonne) e).getType() == TypeColonne.inter)
+                            tabJLabel[x][y + 1].setIcon(icoColonneRouge);
+                        else if(((CaseColonne) e).getType() == TypeColonne.haut)
+                            tabJLabel[x][y + 1].setIcon(icoHautColonneRouge);
                     }
                 }
-                else if (jeu.getGrille()[xGrille][y] instanceof Bombe) {
-                    tabJLabel[x][y].setIcon(icoBombe);
+                else if (e instanceof Bombe) {
+                    tabJLabel[x][y + 1].setIcon(icoBombe);
                 }
-                else if (jeu.getGrille()[xGrille][y] instanceof Bot) {
-                	tabJLabel[x][y].setIcon(icoSmick);
+                else if (e instanceof Bot) {
+                	tabJLabel[x][y + 1].setIcon(icoSmick);
                 }
-                else if (jeu.getGrille()[xGrille][y] instanceof Corde) {
-                    tabJLabel[x][y].setIcon(icoCorde);
+                else if (e instanceof Corde) {
+                    tabJLabel[x][y + 1].setIcon(icoCorde);
                 }
-                else tabJLabel[x][y].setIcon(icoVide); // Cas par défaut (vide)
+                else tabJLabel[x][y + 1].setIcon(icoVide); // Cas par défaut (vide)
             }
         }
     }
@@ -207,6 +265,7 @@ public class VueControleur extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         mettreAJourCurseur();
+        mettreAJourAffichageScores();
         mettreAJourAffichage();
     }
 }
