@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modele.plateau;
 
 import modele.deplacements.*;
@@ -44,7 +39,7 @@ public class Jeu {
         ordonnanceur.add(ia);
     }
 
-    public void resetCmptDepl() {
+    public void resetCompteurDeplacement() {
         cmptDepl.clear();
     }
 
@@ -91,35 +86,35 @@ public class Jeu {
                 String it = scanner.next();         // Arranger les conditons par ordre d'occurence
                 // Statiques
                 if(it.equals("M"))
-                    addEntite(new Mur(this), x, y);
+                    ajouterEntite(new Mur(this), x, y);
                 else if(it.equals("V"))
-                    addEntite(new Vide(this), x, y);
+                    ajouterEntite(new Vide(this), x, y);
                 else if(it.equals("C"))
-                    addEntite(new Corde(this), x, y);
+                    ajouterEntite(new Corde(this), x, y);
                 else if(it.equals("B"))
-                    addEntite(new Bombe(this), x, y);
+                    ajouterEntite(new Bombe(this), x, y);
                 else if(it.equals("PH"))
-                    addEntite(new Plateforme(this, TypePlateforme.horizontale), x, y);
+                    ajouterEntite(new Plateforme(this, TypePlateforme.horizontale), x, y);
                 else if(it.equals("PV"))
-                    addEntite(new Plateforme(this, TypePlateforme.verticale), x, y);
+                    ajouterEntite(new Plateforme(this, TypePlateforme.verticale), x, y);
                 else if(it.equals("PI"))
-                    addEntite(new Plateforme(this, TypePlateforme.intermediaire), x, y);
+                    ajouterEntite(new Plateforme(this, TypePlateforme.intermediaire), x, y);
                 else if(it.equals("PG"))
-                    addEntite(new Plateforme(this, TypePlateforme.supportColonneGauche), x, y);
+                    ajouterEntite(new Plateforme(this, TypePlateforme.supportColonneGauche), x, y);
                 else if(it.equals("PD"))
-                    addEntite(new Plateforme(this, TypePlateforme.supportColonneDroite), x, y);
+                    ajouterEntite(new Plateforme(this, TypePlateforme.supportColonneDroite), x, y);
                 // Dynamiques
                 else if(it.equals("H")) {
                     hector = new Heros(this);
                     RealisateurMouvement.getInstance().addEntiteDynamique(hector);
                     g.addEntiteDynamique(hector);
-                    addEntite(hector, x, y);
+                    ajouterEntite(hector, x, y);
                 }
                 else if(it.equals("S")) {
                     Bot smick = new Bot(this);
                     ia.addEntiteDynamique(smick);
                     g.addEntiteDynamique(smick);
-                    addEntite(smick, x, y);
+                    ajouterEntite(smick, x, y);
                 }
                 else if(it.matches("C[BR][HBI][1-9]")) {
                     CouleurColonne couleur = null;
@@ -135,16 +130,13 @@ public class Jeu {
                     else if(it.matches("C[BR]B[1-9]"))
                         type = TypeColonne.bas;
                     CaseColonne caseColonne = new CaseColonne(this, couleur, type); // Création de la case
-                    addEntite(caseColonne, x, y);
+                    ajouterEntite(caseColonne, x, y);
 
                     // Ajout de la case à sa colonne si elle existe, sinon création :
                     int numColonne = Character.getNumericValue(it.charAt(3));
-                    if(tableColonne.get(numColonne) != null)
-                        tableColonne.get(numColonne).ajouterColonne(caseColonne);
-                    else {
+                    if(tableColonne.get(numColonne) == null)
                         tableColonne.put(numColonne, new Colonne(this, couleur));
-                        tableColonne.get(numColonne).ajouterColonne(caseColonne);
-                    }
+                    tableColonne.get(numColonne).ajouterColonne(caseColonne);
                 }
 
                 // Mise de l'entité précédente à vide :
@@ -158,7 +150,7 @@ public class Jeu {
         c.reset();
     }
 
-    private void addEntite(Entite e, int x, int y) {
+    private void ajouterEntite(Entite e, int x, int y) {
         if(e instanceof EntiteDynamique)
             ((EntiteDynamique) e).setEntitePrecedente(grilleEntites[x][y]);
         grilleEntites[x][y] = e;

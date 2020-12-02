@@ -2,7 +2,6 @@ package modele.plateau.entites_dynamiques;
 
 import modele.plateau.EntiteDynamique;
 import modele.plateau.Jeu;
-import modele.plateau.entites_statiques.Vide;
 
 public class CaseColonne extends EntiteDynamique {
     private final CouleurColonne color;

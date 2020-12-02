@@ -57,7 +57,7 @@ public class VueControleur extends JFrame implements Observer {
     private ImageIcon icoPlateformeInter;
 
     // Icones du compteur
-    private ArrayList<ImageIcon> icoChiffres = new ArrayList<>();
+    private final ArrayList<ImageIcon> icoChiffres = new ArrayList<>();
     private ImageIcon icoPoints;
     private ImageIcon icoP;
     private ImageIcon icoT;

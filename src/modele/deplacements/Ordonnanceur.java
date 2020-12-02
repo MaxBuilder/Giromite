@@ -29,7 +29,7 @@ public class Ordonnanceur extends Observable implements Runnable {
         boolean update = false;
 
         while(true) {
-            jeu.resetCmptDepl();
+            jeu.resetCompteurDeplacement();
             for (RealisateurDeDeplacement d : lstDeplacements) {
                 if (d.realiserDeplacement())
                     update = true;
