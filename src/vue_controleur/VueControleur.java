@@ -1,6 +1,6 @@
 package vue_controleur;
 
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -28,8 +28,9 @@ import modele.plateau.entites_statiques.*;
 public class VueControleur extends JFrame implements Observer {
     private final Jeu jeu;
 
-    private final int sizeX;
-    private final int sizeY;
+    private final int tailleVueX = 20;
+    private final int tailleVueY = 10;
+    private int curseur;
 
     // Icones affichées dans la grille
     private ImageIcon icoHero;
@@ -55,8 +56,6 @@ public class VueControleur extends JFrame implements Observer {
     private JLabel[][] tabJLabel; // Cases graphiques
 
     public VueControleur(Jeu _jeu) {
-        sizeX = Jeu.SIZE_X;
-        sizeY = Jeu.SIZE_Y;
         jeu = _jeu;
 
         chargerLesIcones();
@@ -123,12 +122,11 @@ public class VueControleur extends JFrame implements Observer {
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JComponent grilleJLabels = new JPanel(new GridLayout(sizeY, sizeX)); // grilleJLabels va contenir les cases graphiques et les positionner sous la forme d'une grille
+        JComponent grilleJLabels = new JPanel(new GridLayout(tailleVueY, tailleVueX)); // grilleJLabels va contenir les cases graphiques et les positionner sous la forme d'une grille
+        tabJLabel = new JLabel[tailleVueX][tailleVueY];
 
-        tabJLabel = new JLabel[sizeX][sizeY];
-
-        for (int y = 0; y < sizeY; y++) {
-            for (int x = 0; x < sizeX; x++) {
+        for (int y = 0 ; y < tailleVueY ; y++) {
+            for (int x = 0 ; x < tailleVueX ; x++) {
                 JLabel jlab = new JLabel();
                 tabJLabel[x][y] = jlab; // on conserve les cases graphiques dans tabJLabel pour avoir un accès pratique à celles-ci (voir mettreAJourAffichage() )
                 tabJLabel[x][y].setSize(24, 24);
@@ -138,57 +136,67 @@ public class VueControleur extends JFrame implements Observer {
         add(grilleJLabels);
     }
 
+    private void mettreAJourCurseur() {
+        int positionX = jeu.getPositionPersonnage();
+        if(positionX < 10)
+            curseur = 0;
+        else if(positionX >= Jeu.SIZE_X - 10)
+            curseur = Jeu.SIZE_X - 20;
+        else curseur = positionX - 9;
+    }
+
     private void mettreAJourAffichage() {
 
-        for (int x = 0; x < sizeX; x++) {
-            for (int y = 0; y < sizeY; y++) {
-                if (jeu.getGrille()[x][y] instanceof Heros) {
-                    if(((Heros) jeu.getGrille()[x][y]).getEstMort())
+        for (int x = 0 ; x < tailleVueX; x++) {
+            for (int y = 0 ; y < tailleVueY ; y++) {
+                int xGrille = curseur + x;
+                if (jeu.getGrille()[xGrille][y] instanceof Heros) {
+                    if(((Heros) jeu.getGrille()[xGrille][y]).getEstMort())
                         tabJLabel[x][y].setIcon(icoHeroMort);
-                    else if(((Heros) jeu.getGrille()[x][y]).getEstSurCorde())
+                    else if(((Heros) jeu.getGrille()[xGrille][y]).getEstSurCorde())
                         tabJLabel[x][y].setIcon(icoHeroCorde);
                     else tabJLabel[x][y].setIcon(icoHero);
                 }
-                else if (jeu.getGrille()[x][y] instanceof Mur) {
+                else if (jeu.getGrille()[xGrille][y] instanceof Mur) {
                     tabJLabel[x][y].setIcon(icoMur);
                 }
-                else if (jeu.getGrille()[x][y] instanceof Plateforme) {
-                    if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.verticale)
+                else if (jeu.getGrille()[xGrille][y] instanceof Plateforme) {
+                    if(((Plateforme) jeu.getGrille()[xGrille][y]).getType() == TypePlateforme.verticale)
                         tabJLabel[x][y].setIcon(icoPlateformeV);
-                    else if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.horizontale)
+                    else if(((Plateforme) jeu.getGrille()[xGrille][y]).getType() == TypePlateforme.horizontale)
                         tabJLabel[x][y].setIcon(icoPlateformeH);
-                    else if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.intermediaire)
+                    else if(((Plateforme) jeu.getGrille()[xGrille][y]).getType() == TypePlateforme.intermediaire)
                         tabJLabel[x][y].setIcon(icoPlateformeInter);
-                    else if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.supportColonneGauche)
+                    else if(((Plateforme) jeu.getGrille()[xGrille][y]).getType() == TypePlateforme.supportColonneGauche)
                         tabJLabel[x][y].setIcon(icoSupportColonneGauche);
-                    else if(((Plateforme) jeu.getGrille()[x][y]).getType() == TypePlateforme.supportColonneDroite)
+                    else if(((Plateforme) jeu.getGrille()[xGrille][y]).getType() == TypePlateforme.supportColonneDroite)
                         tabJLabel[x][y].setIcon(icoSupportColonneDroite);
                 }
-                else if(jeu.getGrille()[x][y] instanceof CaseColonne) {
-                    if(((CaseColonne) jeu.getGrille()[x][y]).getCouleur() == CouleurColonne.bleue) {
-                        if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.bas)
+                else if(jeu.getGrille()[xGrille][y] instanceof CaseColonne) {
+                    if(((CaseColonne) jeu.getGrille()[xGrille][y]).getCouleur() == CouleurColonne.bleue) {
+                        if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.bas)
                             tabJLabel[x][y].setIcon(icoBasColonneBleue);
-                        else if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.inter)
+                        else if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.inter)
                             tabJLabel[x][y].setIcon(icoColonneBleue);
-                        else if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.haut)
+                        else if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.haut)
                             tabJLabel[x][y].setIcon(icoHautColonneBleue);
                     }
                     else {
-                        if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.bas)
+                        if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.bas)
                             tabJLabel[x][y].setIcon(icoBasColonneRouge);
-                        else if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.inter)
+                        else if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.inter)
                             tabJLabel[x][y].setIcon(icoColonneRouge);
-                        else if(((CaseColonne) jeu.getGrille()[x][y]).getType() == TypeColonne.haut)
+                        else if(((CaseColonne) jeu.getGrille()[xGrille][y]).getType() == TypeColonne.haut)
                             tabJLabel[x][y].setIcon(icoHautColonneRouge);
                     }
                 }
-                else if (jeu.getGrille()[x][y] instanceof Bombe) {
+                else if (jeu.getGrille()[xGrille][y] instanceof Bombe) {
                     tabJLabel[x][y].setIcon(icoBombe);
                 }
-                else if (jeu.getGrille()[x][y] instanceof Bot) {
+                else if (jeu.getGrille()[xGrille][y] instanceof Bot) {
                 	tabJLabel[x][y].setIcon(icoSmick);
                 }
-                else if (jeu.getGrille()[x][y] instanceof Corde) {
+                else if (jeu.getGrille()[xGrille][y] instanceof Corde) {
                     tabJLabel[x][y].setIcon(icoCorde);
                 }
                 else tabJLabel[x][y].setIcon(icoVide); // Cas par défaut (vide)
@@ -198,6 +206,7 @@ public class VueControleur extends JFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        mettreAJourCurseur();
         mettreAJourAffichage();
     }
 }

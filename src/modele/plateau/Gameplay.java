@@ -18,7 +18,7 @@ public class Gameplay {
     public Gameplay(Jeu _jeu) {
         jeu = _jeu;
         listeNiveau = new ArrayList<>();
-        niveauActuel = -1;
+        niveauActuel = 0;
 
         // Détermination du nombre de niveaux et chargement dans le tableau
         File fichier = new File("data/niveaux/niveaux.txt");
@@ -40,6 +40,13 @@ public class Gameplay {
 
     public void ajouterNiveau(String nomNiveau) {
         listeNiveau.add("data/niveaux/" + nomNiveau + ".txt");
+    }
+
+    public void initNiveau() {
+        System.out.println("Chargement du 1er niveau");
+        jeu.initialisationDesEntites(listeNiveau.get(0));
+        initNombreBombes();
+        nombreBombeActuel = 0;
     }
 
     public boolean verifier(boolean dead) {

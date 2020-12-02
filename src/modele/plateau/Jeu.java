@@ -19,28 +19,25 @@ import java.util.Scanner;
  * (ajouter conditions de victoire, chargement du plateau, etc.)
  */
 public class Jeu {
-
-    public static final int SIZE_X = 20;
+    public static int SIZE_X = 0;
     public static final int SIZE_Y = 10;
 
-    // Compteur de déplacements horizontal et vertical (1 max par défaut, à chaque pas de temps)
     private final HashMap<Entite, Integer> cmptDepl = new HashMap<>();
-
-    private final HashMap<Entite, Point> map = new HashMap<>(); // permet de récupérer la position d'une entité à partir de sa référence
-    private Entite[][] grilleEntites = new Entite[SIZE_X][SIZE_Y]; // permet de récupérer une entité  d à partir de ses coordonnées
+    private final HashMap<Entite, Point> map = new HashMap<>();
+    private Entite[][] grilleEntites;
 
     RealisateurGravite g = new RealisateurGravite();
     RealisateurIA ia = new RealisateurIA();
     RealisateurColonnes c = new RealisateurColonnes();
 
     private final Ordonnanceur ordonnanceur = new Ordonnanceur(this);
-
     private final Gameplay gameplay = new Gameplay(this);
+    Heros hector;
 
     public Jeu() {
-        gameplay.changerNiveau();
+        gameplay.initNiveau();
 
-        // Ajout des réalisateurs à l'ordonnanceur
+        // Ajout des réalisateurs à l'ordonnanceur :
         ordonnanceur.add(g);
         ordonnanceur.add(RealisateurMouvement.getInstance());
         ordonnanceur.add(c);
@@ -81,10 +78,14 @@ public class Jeu {
             System.exit(0);
         }
 
+        // Taille du niveau dans les premiers paramètres et allocation de la grille :
+        SIZE_X = Integer.parseInt(scanner.next());
+        grilleEntites = new Entite[SIZE_X][SIZE_Y];
+
         // Table pour les colonnes
         HashMap<Integer, Colonne> tableColonne = new HashMap<>();
 
-        // Traitement du fichier texte
+        // Traitement du fichier texte :
         for(int y = 0 ; y < SIZE_Y ; y++) {
             for(int x = 0 ; x < SIZE_X ; x++) {
                 String it = scanner.next();         // Arranger les conditons par ordre d'occurence
@@ -109,7 +110,7 @@ public class Jeu {
                     addEntite(new Plateforme(this, TypePlateforme.supportColonneDroite), x, y);
                 // Dynamiques
                 else if(it.equals("H")) {
-                    Heros hector = new Heros(this);
+                    hector = new Heros(this);
                     RealisateurMouvement.getInstance().addEntiteDynamique(hector);
                     g.addEntiteDynamique(hector);
                     addEntite(hector, x, y);
@@ -136,7 +137,7 @@ public class Jeu {
                     CaseColonne caseColonne = new CaseColonne(this, couleur, type); // Création de la case
                     addEntite(caseColonne, x, y);
 
-                    // Ajout de la case à sa colonne si elle existe, sinon création
+                    // Ajout de la case à sa colonne si elle existe, sinon création :
                     int numColonne = Character.getNumericValue(it.charAt(3));
                     if(tableColonne.get(numColonne) != null)
                         tableColonne.get(numColonne).ajouterColonne(caseColonne);
@@ -146,18 +147,18 @@ public class Jeu {
                     }
                 }
 
-                // Mise de l'entité précédente à vide
+                // Mise de l'entité précédente à vide :
                 if(grilleEntites[x][y] instanceof EntiteDynamique)
                     ((EntiteDynamique) grilleEntites[x][y]).setEntitePrecedente(new Vide(this));
             }
         }
 
-        // Ajout des colonnes à leur réalisateur
+        // Ajout des colonnes à leur réalisateur :
         tableColonne.forEach((id, col) -> c.addEntiteDynamique(col));
         c.reset();
     }
 
-    private void addEntite(Entite e, int x, int y) { // A renommer
+    private void addEntite(Entite e, int x, int y) {
         if(e instanceof EntiteDynamique)
             ((EntiteDynamique) e).setEntitePrecedente(grilleEntites[x][y]);
         grilleEntites[x][y] = e;
@@ -188,7 +189,7 @@ public class Jeu {
         
         Point pCible = calculerPointCible(pCourant, d);
         
-        if (contenuDansGrille(pCible) && (objetALaPosition(pCible) == null || !objetALaPosition(pCible).peutServirDeSupport())) { // Adapter
+        if (contenuDansGrille(pCible) && (objetALaPosition(pCible) == null || !objetALaPosition(pCible).peutServirDeSupport())) {
             // Compteur de déplacements
             if (cmptDepl.get(e) == null) {
                 cmptDepl.put(e, 1);
@@ -233,6 +234,8 @@ public class Jeu {
         
         return retour;
     }
+
+    public int getPositionPersonnage() { return map.get(hector).x; }
 
     public Ordonnanceur getOrdonnanceur() {
         return ordonnanceur;
