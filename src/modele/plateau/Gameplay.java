@@ -62,8 +62,10 @@ public class Gameplay {
             return true;
         }
         else {
-            if(nombreBombeActuel == nombreBombeTotal)
+            if(nombreBombeActuel == nombreBombeTotal) {
                 changerNiveau();
+                return true;
+            }
         }
         if(vies == 0)
             System.exit(0);
